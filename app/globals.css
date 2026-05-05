@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --forest-dark: #1A3A2A;
+  --forest: #2C5F2D;
+  --gold: #C8963E;
+  --gold-light: #D4A853;
+  --cream: #F5F0E8;
+  --sand: #E8DCC8;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--forest-dark);
+    color: var(--cream);
+    font-family: Inter, Calibri, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: Georgia, serif;
+    color: var(--cream);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-block px-8 py-3 border border-gold text-gold font-inter text-sm tracking-widest uppercase transition-all duration-300 hover:bg-gold hover:text-forest-dark;
+  }
+
+  .btn-secondary {
+    @apply inline-block px-8 py-3 bg-gold text-forest-dark font-inter text-sm tracking-widest uppercase transition-all duration-300 hover:bg-gold-light;
+  }
+
+  .section-title {
+    @apply font-georgia text-3xl md:text-4xl text-cream mb-4 leading-tight;
+  }
+
+  .section-subtitle {
+    @apply font-inter text-sand text-sm tracking-widest uppercase mb-2;
+  }
+
+  .card-forest {
+    @apply bg-forest/20 border border-forest/40 rounded-sm p-6;
+  }
+
+  .input-field {
+    @apply w-full bg-forest-dark/50 border border-forest/60 text-cream placeholder-sand/50 px-4 py-3 focus:outline-none focus:border-gold transition-colors;
+  }
+
+  .wine-italic {
+    @apply italic font-georgia;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .overlay-dark {
+    background: linear-gradient(to bottom, rgba(26,58,42,0.2), rgba(26,58,42,0.9));
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--forest-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--forest);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}

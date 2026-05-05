@@ -1,0 +1,141 @@
+{
+  "seasons": {
+    "offseason": {
+      "label": "Несезон",
+      "months": "Октябрь — Май",
+      "description": "Тишина в её чистом виде. Лес без туристов."
+    },
+    "season": {
+      "label": "Сезон",
+      "months": "Июнь, Сентябрь",
+      "description": "Мягкий свет, тёплые вечера, спелые ягоды."
+    },
+    "peak": {
+      "label": "Пик",
+      "months": "Июль — Август",
+      "description": "Высокий сезон. Бронировать заранее."
+    }
+  },
+  "accommodation": [
+    {
+      "type": "Апартаменты",
+      "capacity": "до 6 чел",
+      "offseason": 20000,
+      "season": 25000,
+      "peak": 30000,
+      "note": "Завтрак, Smart TV, Wi-Fi, комплимент при заезде"
+    },
+    {
+      "type": "Четырёхместный домик",
+      "capacity": "до 4 чел",
+      "offseason": 11000,
+      "season": 13000,
+      "peak": null,
+      "note": "Smart TV, завтрак, Wi-Fi"
+    },
+    {
+      "type": "Шести-восьмиместный домик",
+      "capacity": "до 8 чел",
+      "offseason": 15000,
+      "season": 17000,
+      "peak": 20000,
+      "note": "Smart TV, завтрак, Wi-Fi"
+    },
+    {
+      "type": "Аренда всей базы",
+      "capacity": "до 80 чел",
+      "offseason": 150000,
+      "season": 200000,
+      "peak": 280000,
+      "note": "Минимум 3 ночи. Все объекты, аквазона, менеджер"
+    }
+  ],
+  "aquazone": [
+    {
+      "tariff": "Дневной",
+      "time": "10:00–17:00",
+      "priceMin": 3000,
+      "priceMax": 3500,
+      "unit": "₽/час"
+    },
+    {
+      "tariff": "Вечерний",
+      "time": "17:00–23:00",
+      "priceMin": 4500,
+      "priceMax": 5500,
+      "unit": "₽/час"
+    },
+    {
+      "tariff": "Минимальный заказ",
+      "time": "3 часа",
+      "priceMin": 10000,
+      "priceMax": 14000,
+      "unit": "₽"
+    },
+    {
+      "tariff": "Банный ритуал",
+      "time": "доп.",
+      "priceMin": 1500,
+      "priceMax": 2500,
+      "unit": "₽ дополнительно"
+    }
+  ],
+  "degustations": [
+    {
+      "format": "Вино (5–7 позиций)",
+      "composition": "Кокур, Мускат, Розе, Каберне-Сира, Саперави",
+      "priceMin": 2500,
+      "priceMax": 5000,
+      "unit": "₽/чел"
+    },
+    {
+      "format": "Устрицы + вино",
+      "composition": "6 устриц + бокал игристого",
+      "priceMin": 1800,
+      "priceMax": 1800,
+      "unit": "₽/чел"
+    },
+    {
+      "format": "Крафтовое пиво",
+      "composition": "Стаут, пшеничное, энопиво (Причал 12)",
+      "priceMin": 600,
+      "priceMax": 900,
+      "unit": "₽/чел"
+    },
+    {
+      "format": "Комбо вечер",
+      "composition": "Вино + устрицы + пиво",
+      "priceMin": 3000,
+      "priceMax": 5000,
+      "unit": "₽/чел"
+    },
+    {
+      "format": "Чипсы из фермерского мяса",
+      "composition": "Фермерский сувенир",
+      "priceMin": 500,
+      "priceMax": null,
+      "unit": "₽/упак"
+    }
+  ],
+  "breakfasts": [
+    {
+      "format": "Лёгкий",
+      "composition": "Яйца, сыр, хлеб, джем, кофе или чай",
+      "extraGuest": 850,
+      "unit": "₽/чел"
+    },
+    {
+      "format": "Фермерский",
+      "composition": "Горячее с фермы, домашний хлеб, яйца, сок",
+      "extraGuest": 950,
+      "unit": "₽/чел"
+    },
+    {
+      "format": "Полный ресторанный",
+      "composition": "Горячее + салат + напиток + десерт",
+      "extraGuestMin": 1100,
+      "extraGuestMax": 1400,
+      "unit": "₽/чел"
+    }
+  ]
+}
