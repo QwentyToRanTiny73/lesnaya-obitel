@@ -29,6 +29,7 @@ export default function Footer() {
                 { href: "/prays", label: "Прайс-лист" },
                 { href: "/kontakty", label: "Контакты" },
                 { href: "/politika-konfidencialnosti", label: "Политика конфиденциальности" },
+                { href: "/style-guide", label: "Style Guide" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link

@@ -2,83 +2,199 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────
+   Design Tokens — Лесная Обитель
+   Pantone-inspired forest pastel + wine accents
+   ───────────────────────────────────────────────────────── */
 :root {
-  --forest-dark: #1A3A2A;
-  --forest: #2C5F2D;
-  --gold: #C8963E;
-  --gold-light: #D4A853;
-  --cream: #F5F0E8;
-  --sand: #E8DCC8;
+  /* Primary system */
+  --c-moss: #7A8B6E;          /* Pantone 5625 C */
+  --c-moss-700: #586850;
+  --c-moss-300: #B8C2A8;
+  --c-sage: #9CAF88;          /* Pantone 5777 C */
+  --c-pforest: #B8C5B0;       /* Pantone 7499 C */
+  --c-beige: #C4B5A0;         /* Pantone 7527 C */
+  --c-cream: #F7F5F0;
+  --c-surface: #E8E4D9;
+
+  /* Wine accents */
+  --c-gold: #C8963E;
+  --c-amber: #D4A853;
+  --c-rose: #D9A6A6;
+  --c-ruby: #9C3838;
+
+  /* Text */
+  --c-ink: #3D3D3D;
+  --c-ink-soft: #6B6B6B;
+  --c-ink-mute: #9A9A9A;
+
+  /* Semantic */
+  --c-success: #8FA88A;
+  --c-warning: #D4C5A5;
+  --c-error: #B07572;
+
+  /* Spacing — 8px grid */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+
+  /* Radius */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+
+  /* Shadows */
+  --sh-soft:   0 1px 2px rgba(60,55,40,0.04), 0 2px 8px rgba(60,55,40,0.06);
+  --sh-nature: 0 6px 16px rgba(122,139,110,0.10), 0 2px 4px rgba(122,139,110,0.06);
+  --sh-elev:   0 12px 28px rgba(60,55,40,0.10);
+
+  /* Motion */
+  --ease-natural: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* ─────────────────────────────────────────────────────────
+   Base
+   ───────────────────────────────────────────────────────── */
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
+  html { scroll-behavior: smooth; }
 
   body {
-    background-color: var(--forest-dark);
-    color: var(--cream);
-    font-family: Inter, Calibri, sans-serif;
+    background-color: var(--c-cream);
+    color: var(--c-ink);
+    font-family: "Inter", Calibri, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5 {
-    font-family: Georgia, serif;
-    color: var(--cream);
+    font-family: "Playfair Display", Georgia, serif;
+    color: var(--c-ink);
+    font-weight: 500;
+  }
+
+  /* Доступность: видимый focus indicator на всех интерактивных */
+  :where(a, button, input, select, textarea):focus-visible {
+    outline: 2px solid var(--c-moss);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--c-sage);
+    color: #fff;
   }
 }
 
+/* ─────────────────────────────────────────────────────────
+   Component classes
+   ───────────────────────────────────────────────────────── */
 @layer components {
+  /* Buttons — touch target ≥ 44px */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-6 min-h-[44px] rounded-sm
+           font-text text-sm font-medium tracking-wide
+           transition-all duration-300 ease-natural
+           focus-visible:outline-none;
+  }
   .btn-primary {
-    @apply inline-block px-8 py-3 border border-gold text-gold font-inter text-sm tracking-widest uppercase transition-all duration-300 hover:bg-gold hover:text-forest-dark;
+    @apply btn bg-moss text-cream-50 hover:bg-moss-700 hover:shadow-nature active:scale-[0.99];
   }
-
   .btn-secondary {
-    @apply inline-block px-8 py-3 bg-gold text-forest-dark font-inter text-sm tracking-widest uppercase transition-all duration-300 hover:bg-gold-light;
+    @apply btn bg-cream-100 text-moss-700 border border-moss-300 hover:bg-surface
+           hover:border-moss active:scale-[0.99];
+  }
+  .btn-ghost {
+    @apply btn text-ink hover:bg-surface;
+  }
+  .btn-wine {
+    @apply btn bg-wine-gold text-cream-50 hover:bg-wine-amber hover:shadow-nature;
+  }
+  .btn-pill {
+    @apply rounded-pill;
   }
 
-  .section-title {
-    @apply font-georgia text-3xl md:text-4xl text-cream mb-4 leading-tight;
+  /* Card */
+  .card {
+    @apply bg-cream-50 rounded-md p-6 shadow-soft border border-surface
+           transition-all duration-300 ease-natural;
+  }
+  .card-hover {
+    @apply hover:scale-[1.02] hover:shadow-nature hover:border-moss-300;
   }
 
-  .section-subtitle {
-    @apply font-inter text-sand text-sm tracking-widest uppercase mb-2;
-  }
-
-  .card-forest {
-    @apply bg-forest/20 border border-forest/40 rounded-sm p-6;
-  }
-
+  /* Inputs */
   .input-field {
-    @apply w-full bg-forest-dark/50 border border-forest/60 text-cream placeholder-sand/50 px-4 py-3 focus:outline-none focus:border-gold transition-colors;
+    @apply w-full bg-cream-50 border border-surface text-ink placeholder-ink-mute
+           min-h-[44px] px-4 rounded-sm
+           focus:outline-none focus:border-moss focus:shadow-focus
+           transition-colors duration-200;
   }
 
-  .wine-italic {
-    @apply italic font-georgia;
+  /* Section helpers */
+  .section-title {
+    @apply font-display text-h1 md:text-display-2 text-ink mb-4 leading-tight;
+  }
+  .section-subtitle {
+    @apply font-text text-overline text-moss uppercase mb-2;
+  }
+
+  /* Pills / chips */
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-pill
+           bg-surface text-ink-soft text-caption font-text;
+  }
+
+  /* Wine quote — Cormorant italic */
+  .quote-wine {
+    @apply font-accent italic text-2xl md:text-3xl text-moss-700 leading-relaxed;
+  }
+
+  /* Legacy совместимость с тёмной темой (HeroSection и др.) */
+  .input-field-dark {
+    @apply w-full bg-forest-dark/50 border border-forest/60 text-cream px-4 py-3
+           focus:outline-none focus:border-gold transition-colors;
   }
 }
 
+/* ─────────────────────────────────────────────────────────
+   Utilities
+   ───────────────────────────────────────────────────────── */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  .text-balance { text-wrap: balance; }
 
-  .overlay-dark {
-    background: linear-gradient(to bottom, rgba(26,58,42,0.2), rgba(26,58,42,0.9));
+  .scroll-fade > * {
+    @apply opacity-0 translate-y-3;
+    animation: fadeUp 600ms var(--ease-natural) forwards;
   }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
 }
 
 /* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--forest-dark);
-}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--c-cream); }
 ::-webkit-scrollbar-thumb {
-  background: var(--forest);
-  border-radius: 3px;
+  background: var(--c-moss-300);
+  border-radius: 4px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--gold);
+::-webkit-scrollbar-thumb:hover { background: var(--c-moss); }
+
+/* Reduced motion — accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
