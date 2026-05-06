@@ -4,10 +4,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 import {
   bookingSchema,
   type BookingData,
   activityOptions,
+  accommodationCapacity,
 } from "@/lib/utils/bookingSchema";
 import {
   accommodationLabels,
@@ -45,6 +47,7 @@ export default function BookingForm() {
       checkOut: defaultCheckOut,
       guests: defaultGuests,
       activities: [],
+      consent: false as unknown as true,
     },
   });
 
@@ -226,14 +229,21 @@ export default function BookingForm() {
           </div>
         </div>
         <div className="mt-4 max-w-xs">
-          <label className="block font-inter text-xs text-sand/60 mb-2">Гостей *</label>
+          <label className="block font-inter text-xs text-sand/60 mb-2">
+            Гостей * <span className="text-sand/40 text-[10px]">
+              (макс {accommodationCapacity[watched.accommodationType] ?? 8})
+            </span>
+          </label>
           <input
             type="number"
             {...register("guests", { valueAsNumber: true })}
             className="input-field"
             min={1}
-            max={80}
+            max={accommodationCapacity[watched.accommodationType] ?? 8}
           />
+          {errors.guests && (
+            <p className="text-red-400 text-xs mt-1 font-inter">{errors.guests.message}</p>
+          )}
         </div>
       </div>
 
@@ -294,6 +304,31 @@ export default function BookingForm() {
           </div>
         </div>
       )}
+
+      {/* Согласие на обработку персональных данных — 152-ФЗ */}
+      <div className="border border-forest/30 bg-forest/10 p-4">
+        <label className="flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            {...register("consent")}
+            className="accent-wine-gold mt-1 flex-shrink-0"
+          />
+          <span className="font-inter text-xs text-sand/70 leading-relaxed">
+            Я согласен(на) на обработку персональных данных в соответствии с{" "}
+            <Link
+              href="/politika-konfidencialnosti"
+              target="_blank"
+              className="text-wine-amber hover:underline"
+            >
+              политикой конфиденциальности
+            </Link>{" "}
+            и Федеральным законом № 152-ФЗ.
+          </span>
+        </label>
+        {errors.consent && (
+          <p className="text-red-400 text-xs mt-2 font-inter">{errors.consent.message}</p>
+        )}
+      </div>
 
       {serverError && (
         <div className="border border-red-900/40 bg-red-900/10 text-red-300 p-4 font-inter text-sm">

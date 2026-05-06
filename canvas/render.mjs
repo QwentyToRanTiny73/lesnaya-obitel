@@ -127,7 +127,7 @@ doc.text("MMXXIV", inner.x + inner.w - 150, HEAD_Y - 13, {
 
 doc.font("serif-italic").fontSize(8.5).fillColor(COL.goldHi);
 doc.text(
-  "ex observationibus septem hectarium  ·  Tauria meridionalis",
+  "ex observationibus octo hectarium  ·  Tauria meridionalis",
   0, HEAD_Y + 12, { width: PAGE_W, align: "center" }
 );
 
@@ -250,13 +250,14 @@ doc.circle(cx, cy, APEX_R + 1).lineWidth(0.35).strokeColor(COL.goldMid).stroke()
 // 5. СЕМЬ STATIO
 // ─────────────────────────────────────────────────────────────────────
 const stations = [
-  { n: "STATIO·I",    s: "fons",       a: -Math.PI / 2 - 0.12 },
-  { n: "STATIO·II",   s: "vitis",      a: -Math.PI / 2 + 0.78 },
-  { n: "STATIO·III",  s: "lacvs",      a: -Math.PI / 2 + 1.74 },
-  { n: "STATIO·IV",   s: "qvercvs",    a: -Math.PI / 2 + 2.62 },
-  { n: "STATIO·V",    s: "via",        a: -Math.PI / 2 + 3.48 },
-  { n: "STATIO·VI",   s: "petra",      a: -Math.PI / 2 + 4.32 },
-  { n: "STATIO·VII",  s: "silentivm",  a: -Math.PI / 2 + 5.30 },
+  { n: "STATIO·I",    s: "fons",       a: -Math.PI / 2 - 0.10 },
+  { n: "STATIO·II",   s: "vitis",      a: -Math.PI / 2 + 0.68 },
+  { n: "STATIO·III",  s: "lacvs",      a: -Math.PI / 2 + 1.52 },
+  { n: "STATIO·IV",   s: "qvercvs",    a: -Math.PI / 2 + 2.30 },
+  { n: "STATIO·V",    s: "via",        a: -Math.PI / 2 + 3.07 },
+  { n: "STATIO·VI",   s: "petra",      a: -Math.PI / 2 + 3.85 },
+  { n: "STATIO·VII",  s: "vinea",      a: -Math.PI / 2 + 4.62 },
+  { n: "STATIO·VIII", s: "silentivm",  a: -Math.PI / 2 + 5.40 },
 ];
 
 stations.forEach((st) => {
@@ -310,9 +311,9 @@ doc.moveTo(scaleX, scaleY).lineTo(scaleX + scaleW, scaleY)
 doc.moveTo(scaleX, scaleY + 2.2).lineTo(scaleX + scaleW, scaleY + 2.2)
   .lineWidth(0.25).strokeColor(COL.goldFaint).stroke();
 
-for (let i = 0; i <= 7; i++) {
-  const x = scaleX + (i / 7) * scaleW;
-  const major = i === 0 || i === 7;
+for (let i = 0; i <= 8; i++) {
+  const x = scaleX + (i / 8) * scaleW;
+  const major = i === 0 || i === 8;
   const tickLen = major ? 7.5 : 4;
   doc.moveTo(x, scaleY).lineTo(x, scaleY - tickLen)
     .lineWidth(major ? 0.7 : 0.4).strokeColor(COL.gold).stroke();
@@ -322,7 +323,7 @@ for (let i = 0; i <= 7; i++) {
 }
 
 doc.font("serif-italic").fontSize(7).fillColor(COL.goldHi);
-doc.text("hectaria · silentii mensvra", scaleX, scaleY + 20, {
+doc.text("octo hectaria · silentii mensvra", scaleX, scaleY + 20, {
   width: scaleW, align: "center",
 });
 
@@ -382,20 +383,14 @@ doc.restore();
 doc.circle(cx, motoY, 0.9).fill(COL.bg);
 
 // Девиз — тонкий курсивный антиквенный шрифт
-doc.font("serif-italic").fontSize(14).fillColor(COL.cream);
-doc.text("Vinum quod hic crevit.", 0, motoY + 18, {
-  width: PAGE_W, align: "center",
-});
-doc.text("Silentivm quod non advehitur.", 0, motoY + 39, {
+doc.font("serif-italic").fontSize(16).fillColor(COL.cream);
+doc.text("Silentivm quod non advehitur.", 0, motoY + 22, {
   width: PAGE_W, align: "center",
 });
 
 // Подстрочник
-doc.font("serif-italic").fontSize(8).fillColor(COL.sand);
-doc.text("Вино, которое росло здесь.", 0, motoY + 65, {
-  width: PAGE_W, align: "center",
-});
-doc.text("Тишина, которую не привозят.", 0, motoY + 78, {
+doc.font("serif-italic").fontSize(9).fillColor(COL.sand);
+doc.text("Тишина, которую не привозят.", 0, motoY + 52, {
   width: PAGE_W, align: "center",
 });
 

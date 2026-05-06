@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/ui/Navigation";
 import Footer from "@/components/ui/Footer";
+import CookieBanner from "@/components/ui/CookieBanner";
 
 const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-inter" });
 
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Лесная Обитель — Эко-база у Красного Камня, Крым",
-    description: "Вино, которое росло здесь. Тишина, которую не привозят.",
+    description: "Тишина, которую не привозят.",
     type: "website",
     locale: "ru_RU",
   },
@@ -43,6 +44,7 @@ export default function RootLayout({
         <Navigation />
         <main>{children}</main>
         <Footer />
+        <CookieBanner />
       </body>
     </html>
   );

@@ -24,8 +24,8 @@ export default function DomikiPage() {
           <p className="section-subtitle">Размещение</p>
           <h1 className="section-title text-4xl md:text-5xl">Домики и апартаменты</h1>
           <p className="font-inter text-sand/60 text-sm leading-relaxed mt-6 max-w-xl mx-auto">
-            Пятнадцать объектов на семи гектарах. Каждый — с видом на лес или горы,
-            на расстоянии от соседей. Завтрак включён во все тарифы.
+            Четырнадцать домиков и апартаменты на восьми гектарах. Каждый — с видом
+            на лес или горы, на расстоянии от соседей. Завтрак включён во все тарифы.
           </p>
         </div>
       </section>

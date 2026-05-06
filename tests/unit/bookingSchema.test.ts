@@ -3,7 +3,7 @@ import { bookingSchema } from "@/lib/utils/bookingSchema";
 
 const validBase = {
   fullName: "Иван Иванов",
-  phone: "+79787776655",
+  phone: "+79785905650",
   email: "ivan@example.com",
   accommodationType: "domik-6-8" as const,
   checkIn: "2025-06-10",
@@ -11,6 +11,7 @@ const validBase = {
   guests: 2,
   activities: [],
   comment: "",
+  consent: true as const,
 };
 
 describe("bookingSchema", () => {
@@ -43,11 +44,11 @@ describe("bookingSchema", () => {
     expect(r.success).toBe(false);
   });
 
-  it("принимает разные форматы телефона +7", () => {
+  it("принимает разные форматы телефона", () => {
     const variants = [
-      "+7 (978) 777-66-55",
-      "8 978 777 66 55",
-      "79787776655",
+      "+7 (978) 590-56-50",
+      "8 978 590 56 50",
+      "79785905650",
     ];
     variants.forEach((phone) => {
       const r = bookingSchema.safeParse({ ...validBase, phone });
@@ -60,6 +61,39 @@ describe("bookingSchema", () => {
       ...validBase,
       accommodationType: "invalid" as never,
     });
+    expect(r.success).toBe(false);
+  });
+
+  it("отклоняет 9 гостей в шести-восьмиместном (макс 8)", () => {
+    const r = bookingSchema.safeParse({ ...validBase, guests: 9 });
+    expect(r.success).toBe(false);
+  });
+
+  it("отклоняет 5 гостей в четырёхместном (макс 4)", () => {
+    const r = bookingSchema.safeParse({
+      ...validBase,
+      accommodationType: "domik-4",
+      guests: 5,
+    });
+    expect(r.success).toBe(false);
+  });
+
+  it("принимает 8 гостей в шести-восьмиместном", () => {
+    const r = bookingSchema.safeParse({ ...validBase, guests: 8 });
+    expect(r.success).toBe(true);
+  });
+
+  it("принимает 6 гостей в апартаментах", () => {
+    const r = bookingSchema.safeParse({
+      ...validBase,
+      accommodationType: "apartamenty",
+      guests: 6,
+    });
+    expect(r.success).toBe(true);
+  });
+
+  it("отклоняет отсутствие согласия (152-ФЗ)", () => {
+    const r = bookingSchema.safeParse({ ...validBase, consent: false });
     expect(r.success).toBe(false);
   });
 });

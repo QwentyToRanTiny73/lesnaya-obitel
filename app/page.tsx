@@ -58,8 +58,8 @@ export default function HomePage() {
           <div className="text-center mb-16">
             <p className="section-subtitle">Размещение</p>
             <h2 className="section-title">
-              Пятнадцать домиков.<br />
-              <span className="text-gold">Одна территория.</span>
+              Четырнадцать домиков.<br />
+              <span className="text-wine-gold">Одна территория.</span>
             </h2>
           </div>
 
@@ -107,7 +107,7 @@ export default function HomePage() {
       <section className="py-24 px-6 bg-forest/10 text-center">
         <div className="max-w-2xl mx-auto">
           <p className="font-georgia italic text-sand/60 text-xl mb-6">
-            Семь гектаров леса ждут.
+            Восемь гектаров леса ждут.
           </p>
           <h2 className="section-title text-4xl md:text-5xl mb-8">
             Приехать и остаться

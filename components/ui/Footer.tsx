@@ -9,10 +9,10 @@ export default function Footer() {
             <h3 className="font-georgia text-cream text-xl mb-4">Лесная Обитель</h3>
             <p className="font-inter text-sand/70 text-sm leading-relaxed">
               Закрытая эко-база у скалы Красный Камень.<br />
-              Краснокаменка, ЮБК, Крым.
+              ул. Исмаила Гаспринского, 33<br />
+              пгт Краснокаменка, МО Ялта, Крым.
             </p>
             <p className="font-inter text-sand/50 text-xs mt-4 italic">
-              Вино, которое росло здесь.<br />
               Тишина, которую не привозят.
             </p>
           </div>
@@ -28,6 +28,7 @@ export default function Footer() {
                 { href: "/pitanie", label: "Питание" },
                 { href: "/prays", label: "Прайс-лист" },
                 { href: "/kontakty", label: "Контакты" },
+                { href: "/politika-konfidencialnosti", label: "Политика конфиденциальности" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -45,30 +46,27 @@ export default function Footer() {
             <h4 className="font-inter text-xs tracking-widest uppercase text-gold mb-4">Связь</h4>
             <div className="space-y-3">
               <a
-                href="tel:+79787776655"
-                className="block font-inter text-sm text-sand/70 hover:text-gold transition-colors"
+                href="tel:+79785905650"
+                className="block font-inter text-sm text-sand/70 hover:text-wine-amber transition-colors"
               >
-                +7 (978) 777-66-55
+                +7 (978) 590-56-50
               </a>
               <a
-                href="https://t.me/lesnaya_obitel"
+                href="https://t.me/CaDi1440"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block font-inter text-sm text-sand/70 hover:text-gold transition-colors"
+                className="block font-inter text-sm text-sand/70 hover:text-wine-amber transition-colors"
               >
-                Telegram
+                Telegram @CaDi1440
               </a>
-              <a
-                href="https://wa.me/79787776655"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block font-inter text-sm text-sand/70 hover:text-gold transition-colors"
+              <span
+                className="block font-inter text-sm text-sand/70"
               >
-                WhatsApp
-              </a>
+                Max · +7 (978) 590-56-50
+              </span>
               <a
                 href="mailto:info@lesnaya-obitel.ru"
-                className="block font-inter text-sm text-sand/70 hover:text-gold transition-colors"
+                className="block font-inter text-sm text-sand/70 hover:text-wine-amber transition-colors"
               >
                 info@lesnaya-obitel.ru
               </a>
@@ -87,7 +85,7 @@ export default function Footer() {
             © 2024 Лесная Обитель. Все права защищены.
           </p>
           <p className="font-inter text-xs text-sand/40">
-            Краснокаменка, Ялтинский район, Крым
+            ул. Исмаила Гаспринского, 33 · пгт Краснокаменка · МО Ялта · Крым
           </p>
         </div>
       </div>

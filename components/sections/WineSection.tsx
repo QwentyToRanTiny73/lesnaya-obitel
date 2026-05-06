@@ -20,12 +20,13 @@ export default function WineSection() {
         <div className="max-w-xl mb-16">
           <p className="section-subtitle">Наши вина</p>
           <h2 className="section-title">
-            Вино, которое<br />
-            <span className="text-gold">росло здесь</span>
+            От лозы<br />
+            <span className="text-wine-gold">до бокала</span>
           </h2>
           <p className="font-inter text-sand/60 text-sm leading-relaxed mt-4">
-            Партия из Новозаведённого. Виноградники, которые работают без спешки.
-            Урожай, который дозревает — а не торопится.
+            Виноградники у скалы Красный Камень. Всё — на нашей территории:
+            лоза, винодельня, бочка, бутылка. Урожай, который дозревает —
+            а не торопится.
           </p>
         </div>
 

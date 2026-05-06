@@ -53,10 +53,7 @@ export default function HeroSection() {
           <span className="text-gold">Обитель</span>
         </h1>
 
-        <p className="font-georgia italic text-sand/80 text-lg md:text-xl mb-3">
-          Вино, которое росло здесь.
-        </p>
-        <p className="font-georgia italic text-sand/60 text-lg md:text-xl mb-12">
+        <p className="font-georgia italic text-sand/80 text-xl md:text-2xl mb-12">
           Тишина, которую не привозят.
         </p>
 
@@ -70,9 +67,9 @@ export default function HeroSection() {
         </div>
 
         <div className="mt-16 flex items-center justify-center gap-8 text-xs text-sand/40 tracking-widest uppercase font-inter">
-          <span>7 га леса</span>
+          <span>8 га леса</span>
           <span className="text-forest">·</span>
-          <span>15 домиков</span>
+          <span>14 домиков + апартаменты</span>
           <span className="text-forest">·</span>
           <span>Частная территория</span>
         </div>
