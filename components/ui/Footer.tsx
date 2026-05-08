@@ -29,7 +29,6 @@ export default function Footer() {
                 { href: "/prays", label: "Прайс-лист" },
                 { href: "/kontakty", label: "Контакты" },
                 { href: "/politika-konfidencialnosti", label: "Политика конфиденциальности" },
-                { href: "/style-guide", label: "Style Guide" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -82,10 +81,10 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-forest/30 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-inter text-xs text-sand/40">
+          <p className="font-inter text-xs text-sand/65">
             © 2024 Лесная Обитель. Все права защищены.
           </p>
-          <p className="font-inter text-xs text-sand/40">
+          <p className="font-inter text-xs text-sand/65">
             ул. Исмаила Гаспринского, 33 · пгт Краснокаменка · МО Ялта · Крым
           </p>
         </div>

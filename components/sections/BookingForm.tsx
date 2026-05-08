@@ -230,7 +230,7 @@ export default function BookingForm() {
         </div>
         <div className="mt-4 max-w-xs">
           <label className="block font-inter text-xs text-sand/60 mb-2">
-            Гостей * <span className="text-sand/40 text-[10px]">
+            Гостей * <span className="text-sand/65 text-[10px]">
               (макс {accommodationCapacity[watched.accommodationType] ?? 8})
             </span>
           </label>
@@ -299,7 +299,7 @@ export default function BookingForm() {
             </div>
             <div className="text-right">
               <p className="font-georgia text-gold text-3xl">{formatPrice(priceInfo.total)}</p>
-              <p className="font-inter text-xs text-sand/40">+ выбранные активности</p>
+              <p className="font-inter text-xs text-sand/65">+ выбранные активности</p>
             </div>
           </div>
         </div>
@@ -345,7 +345,7 @@ export default function BookingForm() {
         >
           {submitting ? "Отправка…" : "Отправить заявку"}
         </button>
-        <p className="font-inter text-xs text-sand/40 mt-4">
+        <p className="font-inter text-xs text-sand/65 mt-4">
           Откроется Telegram и почта с готовым текстом. Свяжемся для подтверждения.
         </p>
       </div>

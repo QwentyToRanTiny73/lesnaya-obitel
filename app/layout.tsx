@@ -59,7 +59,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`${inter.variable} ${playfair.variable} ${cormorant.variable}`}>
-      <body className="antialiased bg-cream text-ink">
+      <body className="antialiased bg-forest-dark text-cream">
         <Navigation />
         <main>{children}</main>
         <Footer />

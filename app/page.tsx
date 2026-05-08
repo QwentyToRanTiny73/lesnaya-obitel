@@ -83,7 +83,7 @@ export default function HomePage() {
                   <span className="font-georgia text-gold text-2xl">
                     {new Intl.NumberFormat("ru-RU").format(domik.prices.offseason)} ₽
                   </span>
-                  <span className="font-inter text-sand/40 text-xs">/сут в несезон</span>
+                  <span className="font-inter text-sand/65 text-xs">/сут в несезон</span>
                 </div>
                 <p className="font-inter text-xs text-gold/60 mt-3 group-hover:text-gold transition-colors">
                   Подробнее →

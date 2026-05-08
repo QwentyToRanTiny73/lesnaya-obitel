@@ -131,7 +131,7 @@ export default function DomikPage({ params }: Props) {
                 </Link>
               </div>
 
-              <p className="font-inter text-xs text-sand/40 text-center">
+              <p className="font-inter text-xs text-sand/65 text-center">
                 Заезд с 14:00 · Выезд до 12:00 · Мин. 2 ночи
               </p>
             </div>

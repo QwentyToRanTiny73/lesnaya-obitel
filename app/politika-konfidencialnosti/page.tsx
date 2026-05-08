@@ -147,7 +147,7 @@ export default function PolitikaKonfidencialnostiPage() {
             </p>
           </div>
 
-          <p className="text-sand/40 text-xs italic pt-4 border-t border-forest/30">
+          <p className="text-sand/65 text-xs italic pt-4 border-t border-forest/30">
             Документ соответствует требованиям 152-ФЗ «О персональных данных»,
             149-ФЗ «Об информации, информационных технологиях и о защите
             информации» и Постановлению Правительства РФ от 01.11.2012 № 1119.

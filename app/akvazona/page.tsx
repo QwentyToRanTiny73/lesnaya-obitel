@@ -74,7 +74,7 @@ export default function AkvazonaPage() {
               </tbody>
             </table>
           </div>
-          <p className="font-inter text-xs text-sand/40 mt-6 text-center">
+          <p className="font-inter text-xs text-sand/65 mt-6 text-center">
             Минимальный заказ — 3 часа. Бронирование через администратора.
           </p>
         </div>

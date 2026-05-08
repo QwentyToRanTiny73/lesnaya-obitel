@@ -71,7 +71,7 @@ export default function PraysPage() {
                   <tr key={i} className="border-b border-forest/20 hover:bg-forest/5 transition-colors">
                     <td className="py-5 pr-6">
                       <div className="font-georgia text-cream">{item.type}</div>
-                      <div className="font-inter text-xs text-sand/40 mt-1">{item.note}</div>
+                      <div className="font-inter text-xs text-sand/65 mt-1">{item.note}</div>
                     </td>
                     <td className="font-inter text-sand/60 text-sm py-5 pr-6">{item.capacity}</td>
                     <td className="font-georgia text-sand/80 text-right py-5 pr-6">{fmt(item.offseason)} ₽</td>

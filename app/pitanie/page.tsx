@@ -43,7 +43,7 @@ export default function PitaniePage() {
                   ))}
                 </ul>
                 <div className="border-t border-forest/30 pt-4">
-                  <p className="font-inter text-xs text-sand/40 mb-1">Доп. гость</p>
+                  <p className="font-inter text-xs text-sand/65 mb-1">Доп. гость</p>
                   <p className="font-georgia text-gold text-lg">
                     {"extraGuestPrice" in item
                       ? `${new Intl.NumberFormat("ru-RU").format(item.extraGuestPrice as number)} ₽`
@@ -66,7 +66,7 @@ export default function PitaniePage() {
             Яйца — свежие, утренние. Мясо — из того, что выращено здесь.
             Домашний хлеб — из небольшой пекарни. Варенье и компоты — с летнего урожая.
           </p>
-          <p className="font-inter text-sand/40 text-xs">
+          <p className="font-inter text-sand/65 text-xs">
             Устрицы с фермы «Причал 12» на Донузлаве — по предварительному заказу
           </p>
         </div>

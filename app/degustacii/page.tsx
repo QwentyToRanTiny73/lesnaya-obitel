@@ -52,7 +52,7 @@ export default function DegustaciiPage() {
                 <p className="font-inter text-sand/60 text-sm leading-relaxed mb-4">
                   {wine.description}
                 </p>
-                <p className="font-inter text-xs text-sand/40">
+                <p className="font-inter text-xs text-sand/65">
                   <span className="text-sand/60">Подача:</span> {wine.temperature}
                 </p>
               </div>

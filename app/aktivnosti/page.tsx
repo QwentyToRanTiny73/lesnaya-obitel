@@ -75,7 +75,7 @@ export default function AktivnostiPage() {
               </p>
               <div className="flex items-center justify-between">
                 <span className="font-georgia text-gold text-lg">{item.price}</span>
-                <span className="font-inter text-xs text-sand/40">{item.schedule}</span>
+                <span className="font-inter text-xs text-sand/65">{item.schedule}</span>
               </div>
             </div>
           ))}

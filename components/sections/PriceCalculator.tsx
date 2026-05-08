@@ -127,7 +127,7 @@ export default function PriceCalculator() {
           )}
 
           {!result && (
-            <p className="text-center font-inter text-sand/40 text-sm py-4">
+            <p className="text-center font-inter text-sand/65 text-sm py-4">
               Выберите даты для расчёта стоимости
             </p>
           )}

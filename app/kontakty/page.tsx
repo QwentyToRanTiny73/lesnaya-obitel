@@ -63,7 +63,7 @@ export default function KontaktyPage() {
                       <a href={`tel:${PHONE_RAW}`} className="font-georgia text-cream hover:text-wine-amber transition-colors">
                         {PHONE_DISPLAY}
                       </a>
-                      <p className="font-inter text-xs text-sand/40 mt-1">Российский мессенджер Max</p>
+                      <p className="font-inter text-xs text-sand/65 mt-1">Российский мессенджер Max</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -87,10 +87,10 @@ export default function KontaktyPage() {
                     href={cianUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block bg-sky-haze/10 border border-sky-day/30 p-5 hover:border-wine-amber transition-colors group"
+                    className="block bg-forest/15 border border-forest/40 p-5 hover:border-gold transition-colors group"
                   >
-                    <p className="font-inter text-xs tracking-widest uppercase text-sky-day mb-2">Циан</p>
-                    <p className="font-georgia text-cream group-hover:text-wine-amber transition-colors">
+                    <p className="font-inter text-xs tracking-widest uppercase text-gold mb-2">Циан</p>
+                    <p className="font-georgia text-cream group-hover:text-gold-light transition-colors">
                       Объявление в Крыму →
                     </p>
                   </a>
@@ -98,10 +98,10 @@ export default function KontaktyPage() {
                     href={avitoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block bg-wine-rose/10 border border-wine-rosedeep/30 p-5 hover:border-wine-amber transition-colors group"
+                    className="block bg-forest/15 border border-forest/40 p-5 hover:border-gold transition-colors group"
                   >
-                    <p className="font-inter text-xs tracking-widest uppercase text-wine-rosedeep mb-2">Авито</p>
-                    <p className="font-georgia text-cream group-hover:text-wine-amber transition-colors">
+                    <p className="font-inter text-xs tracking-widest uppercase text-gold mb-2">Авито</p>
+                    <p className="font-georgia text-cream group-hover:text-gold-light transition-colors">
                       Таунхаус 55 м² в Ялте →
                     </p>
                   </a>
@@ -146,7 +146,7 @@ export default function KontaktyPage() {
                   <p className="font-inter text-sand/50 text-sm mb-1">
                     ул. имени Исмаила Гаспринского, 33
                   </p>
-                  <p className="font-inter text-sand/40 text-xs mb-4">
+                  <p className="font-inter text-sand/65 text-xs mb-4">
                     пгт Краснокаменка, МО Ялта, Крым
                   </p>
                   <a

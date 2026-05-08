@@ -112,7 +112,7 @@ export default function DomikiPage() {
           <p className="font-georgia italic text-sand/60 text-lg mb-4">
             Минимальный срок проживания — 2 ночи.
           </p>
-          <p className="font-inter text-sand/40 text-sm">
+          <p className="font-inter text-sand/65 text-sm">
             Заезд с 14:00. Выезд до 12:00. Ранний/поздний заезд — по договорённости.
           </p>
         </div>

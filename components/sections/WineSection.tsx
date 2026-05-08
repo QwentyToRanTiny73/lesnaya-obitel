@@ -53,10 +53,10 @@ export default function WineSection() {
                 {wine.description}
               </p>
               <div className="border-t border-forest/30 pt-4">
-                <p className="font-inter text-xs text-sand/40">
+                <p className="font-inter text-xs text-sand/65">
                   <span className="text-sand/60">К столу:</span> {wine.pairing}
                 </p>
-                <p className="font-inter text-xs text-sand/40 mt-1">
+                <p className="font-inter text-xs text-sand/65 mt-1">
                   <span className="text-sand/60">Температура:</span> {wine.temperature}
                 </p>
               </div>

@@ -40,7 +40,7 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
       </h3>
 
       {activity.partner && (
-        <p className="font-inter text-xs text-sand/40 mb-2">{activity.partner}</p>
+        <p className="font-inter text-xs text-sand/65 mb-2">{activity.partner}</p>
       )}
 
       <p className="font-inter text-sand/60 text-sm leading-relaxed mb-6">
@@ -51,7 +51,7 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
         <div>
           <p className="font-georgia text-gold text-lg">{activity.price}</p>
           {activity.duration && (
-            <p className="font-inter text-xs text-sand/40">{activity.duration}</p>
+            <p className="font-inter text-xs text-sand/65">{activity.duration}</p>
           )}
         </div>
         <button

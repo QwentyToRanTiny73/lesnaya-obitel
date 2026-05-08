@@ -66,7 +66,7 @@ export default function HeroSection() {
           </Link>
         </div>
 
-        <div className="mt-16 flex items-center justify-center gap-8 text-xs text-sand/40 tracking-widest uppercase font-inter">
+        <div className="mt-16 flex items-center justify-center gap-8 text-xs text-sand/65 tracking-widest uppercase font-inter">
           <span>8 га леса</span>
           <span className="text-forest">·</span>
           <span>14 домиков + апартаменты</span>
