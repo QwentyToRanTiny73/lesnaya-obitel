@@ -1,0 +1,231 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import BookingBar from "../components/BookingBar.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import DomikCard from "../components/DomikCard.astro";
+import ActivityCard from "../components/ActivityCard.astro";
+import Ornament from "../components/Ornament.astro";
+import Icon from "../components/Icon.astro";
+import domiki from "../data/domiki.json";
+import wines from "../data/wines.json";
+import activities from "../data/activities.json";
+import { site, phoneUrl, telegramUrl, fullAddress } from "../data/site";
+import { url } from "../lib/url";
+
+const principles = [
+  { icon: "key", title: "Закрытая территория", text: "Посторонних нет. Только вы и те, кого вы привезли." },
+  { icon: "moon", title: "От двух ночей", text: "Нет суеты заездов на одну ночь. Вы приезжаете — и остаётесь." },
+  { icon: "grape", title: "Всё своё", text: "Вино, ферма, лес. Ничего привозного на столе." },
+  { icon: "trees", title: "Восемь гектаров леса", text: "Тишина здесь не опция, а основной продукт." },
+];
+
+const stats = [
+  { value: "8 га", label: "леса у подножия скалы" },
+  { value: "14", label: "домиков и апартаменты" },
+  { value: "5", label: "вин собственного урожая" },
+  { value: "365", label: "дней баня и бассейн" },
+];
+
+const wineDot: Record<string, string> = { red: "bg-[#a4473f]", rose: "bg-rose", white: "bg-gold-light" };
+
+const farm = [
+  { icon: "egg", text: "Свежие яйца каждое утро" },
+  { icon: "wheat", text: "Домашний хлеб и заготовки" },
+  { icon: "leaf", text: "Птица и мясо с фермы" },
+  { icon: "shell", text: "Устрицы, мидии и креветки с «Причала 12»" },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  name: site.name,
+  description: site.description,
+  url: new URL(import.meta.env.BASE_URL, Astro.site).href,
+  telephone: site.phone.raw,
+  priceRange: "11 000–30 000 ₽ за сутки",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: site.address.street,
+    addressLocality: site.address.locality,
+    addressRegion: site.address.region,
+    addressCountry: "RU",
+  },
+  checkinTime: site.checkIn,
+  checkoutTime: site.checkOut,
+  amenityFeature: ["Завтрак включён", "Wi-Fi", "Финская баня", "Бассейн с подогревом", "Дегустации вина"].map((name) => ({
+    "@type": "LocationFeatureSpecification",
+    name,
+    value: true,
+  })),
+};
+---
+
+<Base jsonLd={jsonLd}>
+  <PageHero size="full" overline="Краснокаменка · Южный берег Крыма" title="Лесная Обитель" lead={site.tagline}>
+    <div class="mt-10 flex flex-wrap gap-4">
+      <a href={url("/bron/")} class="btn btn-gold">Забронировать</a>
+      <a href={url("/domiki/")} class="btn btn-outline">Домики и цены</a>
+    </div>
+  </PageHero>
+
+  <!-- Подбор дат: заходит на обложку -->
+  <section data-tone="ivory" class="relative">
+    <div class="container-site relative -mt-14 md:-mt-20">
+      <BookingBar />
+      <p class="mt-4 text-center text-sm text-muted">
+        От {site.minNights} ночей · заезд с {site.checkIn} · выезд до {site.checkOut} · завтрак включён
+      </p>
+    </div>
+  </section>
+
+  <!-- Манифест -->
+  <section data-tone="ivory" class="section">
+    <div class="container-site grid gap-16 lg:grid-cols-[1fr_1fr] lg:gap-24">
+      <SectionHeading
+        overline="Частное пространство"
+        title="Не база отдыха — дом в лесу"
+        lead="Мы не собираем толпы и не продаём развлечения. У скалы Красный Камень — восемь гектаров леса, пруд, родник и горы. Своё вино, своя ферма, своя тишина. Сюда приезжают за глубиной."
+      />
+      <ul class="grid gap-px self-center border border-line bg-line sm:grid-cols-2">
+        {
+          principles.map((p) => (
+            <li class="bg-surface p-7">
+              <Icon name={p.icon} size={28} class="text-accent" />
+              <h3 class="mt-5 font-display text-xl">{p.title}</h3>
+              <p class="mt-2 text-[0.9375rem] leading-relaxed text-muted">{p.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Цифры -->
+  <section data-tone="ivory" class="pb-8">
+    <div class="container-site">
+      <dl class="grid grid-cols-2 border-y border-line md:grid-cols-4">
+        {
+          stats.map((s, i) => (
+            <div
+              class:list={[
+                "border-line px-4 py-10 text-center",
+                i % 2 === 1 && "border-l",
+                i >= 2 && "border-t md:border-t-0",
+                i === 2 && "md:border-l",
+              ]}
+            >
+              <dt class="sr-only">{s.label}</dt>
+              <dd class="font-display text-5xl md:text-6xl">{s.value}</dd>
+              <dd class="mt-3 text-sm text-muted">{s.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- Размещение -->
+  <section data-tone="champagne" class="section">
+    <div class="container-site">
+      <div class="flex flex-wrap items-end justify-between gap-8">
+        <SectionHeading overline="Размещение" title="Четырнадцать домиков. Одна территория." />
+        <a href={url("/domiki/")} class="link-arrow">Все варианты <Icon name="arrow" size={16} /></a>
+      </div>
+      <div class="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        {domiki.map((d, i) => <DomikCard domik={d} index={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Вино -->
+  <section data-tone="deep" class="section grain">
+    <div class="container-site grid gap-16 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
+      <div>
+        <SectionHeading
+          overline="Винодельня"
+          title="От лозы до бокала"
+          lead="Виноградники у скалы Красный Камень. Лоза, давильня, бочка, бутылка — всё на нашей территории. Урожай, который дозревает, а не торопится."
+        />
+        <a href={url("/degustacii/")} class="btn btn-gold mt-10">Дегустации</a>
+      </div>
+      <ol class="border-t border-line">
+        {
+          wines.map((w, i) => (
+            <li class="grid grid-cols-[2.5rem_1fr] gap-x-4 border-b border-line py-6">
+              <span class="pt-1 font-display text-sm text-accent">0{i + 1}</span>
+              <div>
+                <p class="flex items-center gap-3">
+                  <span class:list={["size-2 rounded-full", wineDot[w.type]]} aria-hidden="true" />
+                  <span class="accent-italic text-[1.75rem] leading-none">{w.name}</span>
+                </p>
+                <p class="mt-2 text-[0.9375rem] text-muted">{w.profile}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Впечатления -->
+  <section data-tone="ivory" class="section">
+    <div class="container-site">
+      <div class="flex flex-wrap items-end justify-between gap-8">
+        <SectionHeading
+          overline="Впечатления"
+          title="Горы, море и всё, что между"
+          lead="Ничего обязательного — только то, что хочется. Остальное — на странице активностей."
+        />
+        <a href={url("/aktivnosti/")} class="link-arrow">Все активности <Icon name="arrow" size={16} /></a>
+      </div>
+      <div class="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        {activities.own.map((a) => <ActivityCard activity={a} kind="own" />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Ферма и аквазона -->
+  <section data-tone="champagne" class="section">
+    <div class="container-site grid gap-16 lg:grid-cols-2 lg:gap-24">
+      <div>
+        <SectionHeading
+          overline="Ферма"
+          title="Всё на столе выращено здесь"
+          lead="Куры, гуси, утки, цесарки, свиньи и огород. Яйца утром приносят к завтраку, мясо готовят из своего. Морепродукты — с нашей фермы на Донузлаве."
+        />
+        <ul class="mt-10 grid gap-4 sm:grid-cols-2">
+          {farm.map((f) => <li class="flex items-start gap-4"><Icon name={f.icon} size={24} class="mt-0.5 shrink-0 text-accent" /><span>{f.text}</span></li>)}
+        </ul>
+        <a href={url("/pitanie/")} class="link-arrow mt-8">Завтраки <Icon name="arrow" size={16} /></a>
+      </div>
+      <div data-tone="deep" class="grain flex flex-col justify-between p-10 md:p-14">
+        <div>
+          <p class="overline">Аквазона</p>
+          <h3 class="h2 mt-5">Баня и бассейн круглый год</h3>
+          <p class="lead mt-6">Финская баня, бассейн с подогревом и комната отдыха на шестерых. Зимой — пар и тёплая вода под открытым небом.</p>
+        </div>
+        <div class="mt-10 flex flex-wrap items-center gap-6">
+          <a href={url("/akvazona/")} class="btn btn-outline">Тарифы</a>
+          <span class="text-sm text-muted">от 3 000 ₽/час</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Финал -->
+  <section data-tone="ivory" class="section">
+    <div class="container-site max-w-3xl text-center">
+      <p class="accent-italic text-3xl text-muted md:text-4xl">Восемь гектаров леса ждут.</p>
+      <h2 class="h2 mt-4">Приехать и остаться</h2>
+      <Ornament class="mt-8 justify-center" />
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href={url("/bron/")} class="btn btn-dark">Забронировать</a>
+        <a href={telegramUrl} target="_blank" rel="noopener" class="btn btn-outline"><Icon name="send" size={16} />Написать в Telegram</a>
+      </div>
+      <p class="mt-8 text-sm text-muted">
+        <a href={phoneUrl} class="underline-offset-4 hover:underline">{site.phone.display}</a> · {fullAddress}
+      </p>
+    </div>
+  </section>
+</Base>

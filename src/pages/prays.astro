@@ -1,0 +1,192 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import Icon from "../components/Icon.astro";
+import domiki from "../data/domiki.json";
+import prices from "../data/prices.json";
+import activities from "../data/activities.json";
+import breakfasts from "../data/breakfasts.json";
+import { url } from "../lib/url";
+import { formatPrice, seasonLabels, seasonMonths, type Season } from "../lib/price";
+
+const seasons: Season[] = ["offseason", "season", "peak"];
+const range = (min: number, max: number | null) =>
+  !max || min === max ? formatPrice(min) : `${formatPrice(min).replace(/ ₽$/, "")}–${formatPrice(max)}`;
+const allActivities = [...activities.own, ...activities.partner, ...activities.special];
+---
+
+<Base
+  title="Прайс-лист"
+  description="Цены на проживание по сезонам, аквазону, дегустации, активности и завтраки в «Лесной Обители». Калькулятор стоимости и PDF для скачивания."
+>
+  <PageHero overline="Стоимость" title="Прайс-лист" lead="Все цены — проживание, аквазона, дегустации, активности, завтраки. Можно посчитать поездку и скачать прайс в PDF.">
+    <a href={url("/prays.pdf")} class="btn btn-gold mt-10" download><Icon name="download" size={16} />Скачать PDF</a>
+  </PageHero>
+
+  <!-- Сезоны -->
+  <section data-tone="ivory" class="pt-20">
+    <div class="container-site">
+      <ul class="grid gap-px border border-line bg-line md:grid-cols-3">
+        {
+          Object.values(prices.seasons).map((s) => (
+            <li class="bg-surface p-8">
+              <p class="overline">{s.months}</p>
+              <h2 class="h3 mt-4">{s.label}</h2>
+              <p class="mt-2 text-muted">{s.description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Проживание -->
+  <section data-tone="ivory" class="section">
+    <div class="container-site">
+      <SectionHeading overline="Проживание" title="Цены за сутки" lead="Завтрак включён. Минимум 2 ночи, аренда всей базы — от 3 ночей." />
+      <div class="mt-12 overflow-x-auto">
+        <table class="price-table min-w-[44rem]">
+          <caption class="sr-only">Стоимость проживания по сезонам</caption>
+          <thead>
+            <tr>
+              <th scope="col">Размещение</th>
+              {seasons.map((s) => <th scope="col" class="num">{seasonLabels[s]}<span class="block normal-case tracking-normal">{seasonMonths[s]}</span></th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {
+              domiki.map((d) => (
+                <tr>
+                  <td>
+                    <a href={url(`/domiki/${d.slug}/`)} class="font-display text-lg hover:text-accent">{d.title}</a>
+                    <span class="block text-sm text-muted">до {d.capacity} гостей</span>
+                  </td>
+                  {seasons.map((s) => (
+                    <td class="num">{d.prices[s] === null ? <span class="text-muted">—</span> : `${d.pricePrefix ? "от " : ""}${formatPrice(d.prices[s]!)}`}</td>
+                  ))}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Калькулятор -->
+  <section data-tone="champagne" class="section">
+    <div class="container-site grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+      <SectionHeading overline="Калькулятор" title="Посчитать поездку" lead="Каждая ночь считается по своему сезону — на стыке июня и июля цена сложится честно." />
+      <form id="calc" class="grid gap-6 border border-line bg-raised p-8 md:p-10" aria-label="Калькулятор стоимости">
+        <div>
+          <label class="field-label" for="calc-type">Размещение</label>
+          <select id="calc-type" class="field">
+            {domiki.map((d) => <option value={d.id} selected={d.id === "domik-6-8"}>{d.title}</option>)}
+          </select>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2">
+          <div><label class="field-label" for="calc-in">Заезд</label><input id="calc-in" type="date" class="field" /></div>
+          <div><label class="field-label" for="calc-out">Выезд</label><input id="calc-out" type="date" class="field" /></div>
+        </div>
+        <div class="flex flex-wrap items-end justify-between gap-6 border-t border-line pt-6">
+          <div aria-live="polite">
+            <p id="calc-total" class="font-display text-4xl">—</p>
+            <p id="calc-detail" class="mt-2 text-sm text-muted">Выберите даты</p>
+          </div>
+          <a id="calc-book" href={url("/bron/")} class="btn btn-dark">Забронировать</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Завтраки, аквазона, дегустации, активности -->
+  <section data-tone="ivory" class="section">
+    <div class="container-site grid gap-24">
+      <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+        <SectionHeading overline="Питание" title="Завтраки" lead="Включены в проживание. Цены — для дополнительных гостей." as="h2" />
+        <table class="price-table">
+          <caption class="sr-only">Завтраки</caption>
+          <tbody>
+            {breakfasts.map((b) => (
+              <tr><th scope="row">{b.title}<span class="sub">{b.composition.join(", ")}</span></th><td class="num">{b.extraGuest}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+        <SectionHeading overline="Аквазона" title="Баня и бассейн" lead="Минимальный заказ — 3 часа." />
+        <table class="price-table">
+          <caption class="sr-only">Аквазона</caption>
+          <tbody>
+            {prices.aquazone.map((t) => (
+              <tr><th scope="row">{t.tariff}<span class="sub">{t.time}</span></th><td class="num">{range(t.priceMin, t.priceMax)}<span class="block font-sans text-xs text-muted">{t.unit.replace("₽", "").trim()}</span></td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+        <SectionHeading overline="Дегустации" title="Вино, морепродукты, пиво" lead="18+. Чрезмерное употребление алкоголя вредит вашему здоровью." />
+        <table class="price-table">
+          <caption class="sr-only">Дегустации</caption>
+          <tbody>
+            {prices.degustations.map((d) => (
+              <tr><th scope="row">{d.format}<span class="sub">{d.composition}</span></th><td class="num">{d.priceMax === null ? "от " : ""}{range(d.priceMin, d.priceMax)}<span class="block font-sans text-xs text-muted">{d.unit.replace("₽", "").trim()}</span></td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+        <SectionHeading overline="Активности" title="Экскурсии и досуг" />
+        <table class="price-table">
+          <caption class="sr-only">Активности</caption>
+          <tbody>
+            {allActivities.map((a) => (
+              <tr><th scope="row">{a.title}{"priceNote" in a && a.priceNote && <span class="sub">{a.priceNote}</span>}</th><td class="num">{a.price}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-center text-sm text-muted">Цены могут меняться — точную стоимость подтвердим при бронировании.</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { quote } from "../lib/booking";
+  import { formatPrice, getAccommodation, minNightsFor, pluralNights, type AccommodationId } from "../lib/price";
+
+  const type = document.getElementById("calc-type") as HTMLSelectElement;
+  const checkIn = document.getElementById("calc-in") as HTMLInputElement;
+  const checkOut = document.getElementById("calc-out") as HTMLInputElement;
+  const total = document.getElementById("calc-total")!;
+  const detail = document.getElementById("calc-detail")!;
+  const book = document.getElementById("calc-book") as HTMLAnchorElement;
+  const bookBase = book.getAttribute("href")!;
+
+  const update = () => {
+    const id = type.value as AccommodationId;
+    const q = quote(id, checkIn.value, checkOut.value);
+    const params = new URLSearchParams({ type: id });
+    if (checkIn.value) params.set("checkIn", checkIn.value);
+    if (checkOut.value) params.set("checkOut", checkOut.value);
+    book.href = `${bookBase}?${params}`;
+
+    if (!q) {
+      total.textContent = "—";
+      detail.textContent = "Выберите даты";
+    } else if (q.nights < minNightsFor(id)) {
+      total.textContent = "—";
+      detail.textContent = `Минимум ${minNightsFor(id)} ${pluralNights(minNightsFor(id))}`;
+    } else {
+      total.textContent = formatPrice(q.total);
+      detail.textContent = `${q.nights} ${pluralNights(q.nights)} · ${getAccommodation(id).title} · завтрак включён`;
+    }
+  };
+  document.getElementById("calc")!.addEventListener("input", update);
+  document.getElementById("calc")!.addEventListener("submit", (e) => e.preventDefault());
+</script>

@@ -1,161 +1,72 @@
 # Лесная Обитель
 
-Сайт частной эко-базы отдыха у скалы Красный Камень. Краснокаменка, ЮБК, Крым.
+Сайт частной эко-базы у скалы Красный Камень (Краснокаменка, ЮБК).
+Живая версия: https://qwentytorantiny73.github.io/lesnaya-obitel/
 
 ## Стек
 
-- **Framework**: Next.js 14 (App Router)
-- **Styling**: Tailwind CSS + кастомные CSS-переменные
-- **Язык**: TypeScript
-- **Формы**: react-hook-form + zod
-- **Анимации**: Framer Motion
-- **PDF**: pdfkit (runtime) + ReportLab (offline через Python)
-- **Тестирование**: bun:test (unit) + Playwright (e2e)
-- **Deploy**: Vercel
+| Задача | Решение | Почему |
+|---|---|---|
+| Сайт | [Astro](https://astro.build) 7, TypeScript | Отдаёт готовый HTML, JavaScript только там, где он нужен (форма брони, калькулятор) |
+| Стили | Tailwind CSS 4 + система тонов в `src/styles/global.css` | Цвет текста выводится из тона секции — светлый текст не попадёт на светлый фон |
+| Шрифты | Playfair Display, Cormorant Garamond, Inter — с сайта, без Google | Не зависят от внешних сервисов |
+| PDF-прайс | pdfkit, `scripts/build-pdf.ts` | Собирается из тех же данных, что и сайт |
+| Тесты | `bun test`: цены, валидация, контраст палитры | Палитру нельзя сломать незаметно |
+| Проверка сборки | `scripts/check-dist.ts` | Битые ссылки, устаревшие контакты и запрещённые темы не попадут на сайт |
+| Хостинг | GitHub Pages через GitHub Actions | Бесплатно, деплой при каждом пуше в `main` |
 
-## Запуск локально
+## Где что менять
+
+| Что | Файл |
+|---|---|
+| Телефон, Telegram, адрес, ссылки на Циан и Авито, реквизиты | `src/data/site.ts` |
+| Домики и цены по сезонам | `src/data/domiki.json` |
+| Активности | `src/data/activities.json` |
+| Вина | `src/data/wines.json` |
+| Завтраки | `src/data/breakfasts.json` |
+| Аквазона и дегустации | `src/data/prices.json` |
+| Цвета и шрифты | `src/styles/global.css` |
+
+Цены везде (страницы, калькулятор, форма брони, PDF) берутся из этих файлов — достаточно поменять в одном месте.
+
+Фотографии: положите файлы в `public/images/` и передайте путь в компонент `ArtTile` (`src="images/apartamenty.jpg"`) — художественная плитка заменится фото.
+
+## Запуск на своём компьютере
+
+Нужен [Bun](https://bun.sh) 1.3+.
 
 ```bash
 bun install
-bun run dev
-# открыть http://localhost:3000
+bun run dev        # http://localhost:4321/lesnaya-obitel/
+bun run test       # тесты
+bun run build      # PDF + сборка в dist/ + проверка dist
+bun run preview    # посмотреть собранную версию
 ```
 
-## Скрипты
+## Развёртывание на GitHub Pages
+
+Деплой полностью автоматический: каждый пуш в ветку `main` запускает `.github/workflows/deploy.yml` —
+тесты → проверка типов → PDF → сборка → проверка dist → публикация. Если любой шаг падает, сайт не меняется.
+
+Один раз в репозитории: **Settings → Pages → Build and deployment → Source: GitHub Actions** (уже включено).
+
+Обычная правка:
 
 ```bash
-bun run dev          # dev-сервер
-bun run build        # production build
-bun run start        # production-сервер
-bun run lint         # eslint
-
-bun run test         # unit-тесты (bun:test, 19 тестов)
-bun run test:e2e     # e2e-тесты Playwright
-bun run pdf:generate # сгенерировать прайс-лист PDF (Python + ReportLab)
+git add -A
+git commit -m "Обновил цены на сезон"
+git push origin main
 ```
 
-## Структура
-
-```
-app/                    # роуты Next.js (App Router)
-  page.tsx              # главная
-  domiki/               # /domiki + /domiki/[slug]
-  aktivnosti/           # /aktivnosti
-  degustacii/           # /degustacii
-  akvazona/             # /akvazona
-  pitanie/              # /pitanie
-  kontakty/             # /kontakty
-  bron/                 # /bron + /bron/success
-  prays/                # /prays
-  api/
-    booking/route.ts    # POST /api/booking — приём заявок
-    pdf/route.ts        # GET /api/pdf — скачать прайс
-  sitemap.ts            # /sitemap.xml
-  robots.ts             # /robots.txt
-
-components/
-  ui/                   # Navigation, Footer
-  sections/             # Hero, TrustBlock, BookingWidget, BookingForm, ActivityCard и др.
-
-lib/
-  data/                 # JSON-данные: domiki, wines, activities, prices, breakfasts
-  utils/
-    price.ts            # утилиты ценообразования + сезонность
-    bookingSchema.ts    # zod-схема валидации формы
-
-scripts/
-  generate_price.py     # офлайн-генерация PDF прайс-листа на Python (ReportLab)
-
-tests/
-  unit/                 # bun:test, 19 тестов (price.ts + bookingSchema.ts)
-  e2e/                  # Playwright: navigation, booking, restrictions
-```
-
-## Критические ограничения
-
-**Старообрядческий храм на территории НЕ упоминается нигде на сайте.** Это
-жёсткое ограничение, проверяется автоматически через `tests/e2e/restrictions.spec.ts`.
-Тест проходится по всем страницам и ищет слова: `храм`, `церковь`, `chapel`,
-`church`, `старообряд`. Любое упоминание ломает билд.
-
-## Деплой на GitHub Pages (текущий)
-
-Сайт развёрнут как статический экспорт Next.js. Все API-маршруты заменены
-на клиентскую логику:
-
-- **Форма бронирования** — открывает Telegram-чат с готовым текстом и
-  параллельно `mailto:` на info@lesnaya-обитель.ru. Никаких токенов на клиенте,
-  никаких приватных эндпоинтов.
-- **PDF-прайс** — пред-сгенерирован скриптом `scripts/prebuild-pdf.mjs` в
-  `public/prays.pdf` перед билдом.
-
-### Как развернуть
-
-1. Создать репозиторий на GitHub и запушить туда содержимое `lesnaya-obitel/`.
-2. В **Settings → Pages → Source** выбрать **GitHub Actions**.
-3. Запушить в `main` — workflow `.github/workflows/deploy.yml` сам:
-   - установит Bun
-   - запустит `bun test tests/unit`
-   - соберёт статический экспорт с правильным `basePath`
-   - опубликует на Pages
-
-URL по умолчанию: `https://<username>.github.io/<repo>/`
+Через 1–2 минуты изменения на сайте. Ход сборки — во вкладке **Actions** репозитория.
 
 ### Свой домен
 
-В `Settings → Pages → Custom domain` добавить домен и положить
-`public/CNAME` с одной строкой — именем домена.
+1. Купите домен у российского регистратора (например, `lesnaya-obitel.ru`).
+2. В DNS добавьте записи `A` на адреса GitHub Pages: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`.
+3. **Settings → Pages → Custom domain** — впишите домен, включите **Enforce HTTPS**.
+4. В `astro.config.mjs`: `site: "https://lesnaya-obitel.ru"`, `base: "/"`; в `scripts/check-dist.ts`: `BASE = "/"`.
 
-При своём домене **убрать** `basePath` — переменная `GITHUB_REPOSITORY`
-должна быть пустой или содержать `<user>.github.io`. В workflow это можно
-сделать через `env`.
+### Откат
 
-## Деплой на Vercel (альтернатива)
-
-### Через GitHub + Vercel UI
-
-1. Залить проект в GitHub.
-2. На vercel.com подключить репозиторий — Next.js определится автоматически.
-3. В Project Settings → Environment Variables добавить:
-   - `TELEGRAM_BOT_TOKEN`
-   - `TELEGRAM_CHAT_ID`
-   - `RESEND_API_KEY`
-   - `NEXT_PUBLIC_YANDEX_MAPS_KEY`
-   - `NEXT_PUBLIC_BASE_URL`
-4. Подключить домен через Settings → Domains.
-
-### Через Vercel CLI
-
-```bash
-bunx vercel login        # OAuth-флоу через браузер
-bunx vercel              # preview-деплой
-bunx vercel --prod       # production-деплой
-```
-
-Или с токеном (для CI/CD):
-
-```bash
-VERCEL_TOKEN=xxx bunx vercel --prod --token=$VERCEL_TOKEN
-```
-
-## Переменные окружения
-
-Все ключи опциональны: при отсутствии заявки уходят только в server-логи.
-См. `.env.example`.
-
-## PDF-прайс
-
-Доступен двумя путями:
-
-1. **Runtime** (всегда актуальный): `GET /api/pdf` — генерируется на лету
-   через pdfkit из `lib/data/prices.json`.
-2. **Offline** (для рассылок и печати): `python scripts/generate_price.py
-   --output prays.pdf` — использует ReportLab, поддерживает русский текст
-   из коробки.
-
-## Тон и текстовая часть
-
-Тихий, уверенный, глубокий. Никаких восклицательных знаков, никаких
-«незабываемых отдыхов» и «лучших баз». Все тексты — на русском.
-
-«Вино, которое росло здесь. Тишина, которую не привозят.»
+Версия до редизайна сохранена под тегом `v1-nextjs`. Вернуть любую версию: `git revert <коммит>` и пуш в `main`.

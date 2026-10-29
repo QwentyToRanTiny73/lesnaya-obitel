@@ -1,0 +1,83 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import Icon from "../components/Icon.astro";
+import { site, phoneUrl, telegramUrl, fullAddress } from "../data/site";
+
+const mapUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(fullAddress)}`;
+
+const routes = [
+  { from: "Из Ялты", text: "Около 20 минут на машине по трассе Ялта — Гурзуф, поворот на Краснокаменку." },
+  { from: "Из Симферополя", text: "Около полутора часов по трассе Симферополь — Ялта, далее через Гурзуф." },
+  { from: "Трансфер", text: "Встретим в аэропорту Симферополя или в Ялте — договоримся при бронировании." },
+];
+const nearby = [
+  ["Скала Красный Камень", "5 минут пешком"],
+  ["Гурзуф", "10 минут на машине"],
+  ["Море", "15 минут на машине"],
+  ["Ялта", "20 минут на машине"],
+];
+---
+
+<Base title="Контакты и как добраться" description={`Как связаться с «Лесной Обителью» и как доехать. ${fullAddress}. Телефон ${site.phone.display}, Telegram @${site.telegram}, Max.`}>
+  <PageHero overline="Связь" title="Контакты" lead={fullAddress} />
+
+  <section data-tone="ivory" class="section">
+    <div class="container-site grid gap-16 lg:grid-cols-2 lg:gap-24">
+      <div>
+        <SectionHeading overline="Напишите или позвоните" title="Мы на связи" lead="Отвечаем в течение часа в дневное время. Быстрее всего — в Telegram." />
+        <ul class="mt-12 border-t border-line">
+          <li class="border-b border-line">
+            <a href={phoneUrl} class="flex min-h-20 items-center gap-6 py-4">
+              <Icon name="phone" size={26} class="text-accent" />
+              <span><span class="block text-[0.6875rem] tracking-[0.18em] uppercase text-muted">Телефон</span><span class="font-display text-2xl">{site.phone.display}</span></span>
+            </a>
+          </li>
+          <li class="border-b border-line">
+            <a href={telegramUrl} target="_blank" rel="noopener" class="flex min-h-20 items-center gap-6 py-4">
+              <Icon name="send" size={26} class="text-accent" />
+              <span><span class="block text-[0.6875rem] tracking-[0.18em] uppercase text-muted">Telegram</span><span class="font-display text-2xl">@{site.telegram}</span></span>
+            </a>
+          </li>
+          <li class="border-b border-line">
+            <div class="flex min-h-20 items-center gap-6 py-4">
+              <Icon name="message" size={26} class="text-accent" />
+              <span><span class="block text-[0.6875rem] tracking-[0.18em] uppercase text-muted">Max — по номеру</span><span class="font-display text-2xl">{site.max.display}</span></span>
+            </div>
+          </li>
+        </ul>
+
+        <h2 class="h3 mt-16">Мы на площадках</h2>
+        <div class="mt-6 grid gap-4 sm:grid-cols-2">
+          <a href={site.listings.cian} target="_blank" rel="noopener" class="group flex items-center justify-between border border-line bg-raised p-6 hover:border-accent">
+            <span><span class="block text-[0.6875rem] tracking-[0.18em] uppercase text-accent">Циан</span><span class="mt-1 block">Объявление в Крыму</span></span>
+            <Icon name="arrow" size={18} class="text-accent transition-transform group-hover:translate-x-1" />
+          </a>
+          <a href={site.listings.avito} target="_blank" rel="noopener" class="group flex items-center justify-between border border-line bg-raised p-6 hover:border-accent">
+            <span><span class="block text-[0.6875rem] tracking-[0.18em] uppercase text-accent">Авито</span><span class="mt-1 block">Объявление в Ялте</span></span>
+            <Icon name="arrow" size={18} class="text-accent transition-transform group-hover:translate-x-1" />
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div data-tone="deep" class="grain p-10 md:p-12">
+          <Icon name="pin" size={30} class="text-accent" />
+          <p class="overline mt-6">Адрес</p>
+          <p class="mt-3 font-display text-2xl leading-snug">{site.address.street}</p>
+          <p class="mt-2 text-muted">{site.address.locality}, {site.address.district}, {site.address.region}</p>
+          <a href={mapUrl} target="_blank" rel="noopener" class="btn btn-outline mt-8">Открыть в Яндекс Картах</a>
+          <dl class="mt-10 grid gap-3 border-t border-line pt-8 text-sm">
+            {nearby.map(([place, time]) => <div class="flex justify-between gap-4"><dt>{place}</dt><dd class="text-muted">{time}</dd></div>)}
+          </dl>
+        </div>
+
+        <h2 class="h3 mt-14">Как добраться</h2>
+        <ul class="mt-6 grid gap-6">
+          {routes.map((r) => <li class="border-l border-accent pl-6"><p class="font-display text-lg">{r.from}</p><p class="mt-1 text-muted">{r.text}</p></li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>

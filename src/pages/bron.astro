@@ -1,0 +1,272 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import Icon from "../components/Icon.astro";
+import domiki from "../data/domiki.json";
+import { bookingActivities } from "../data/bookingOptions";
+import { site, phoneUrl, telegramUrl } from "../data/site";
+import { url } from "../lib/url";
+---
+
+<Base
+  title="Бронирование"
+  description="Заявка на бронирование домика в «Лесной Обители». Расчёт стоимости по сезонам, от двух ночей, завтрак включён."
+>
+  <PageHero
+    overline="Бронирование"
+    title="Заявка на проживание"
+    lead="Заполните форму — посчитаем стоимость сразу, а заявку вы отправите нам в Telegram в один клик. Это не оплата: подтвердим бронь в переписке."
+  />
+
+  <section data-tone="ivory" class="section">
+    <div class="container-site grid gap-14 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
+      <form id="booking-form" novalidate class="grid gap-12" aria-describedby="form-note">
+        <fieldset class="grid gap-6">
+          <legend class="overline mb-6">01 · Даты и размещение</legend>
+          <div>
+            <label class="field-label" for="accommodation">Размещение</label>
+            <select id="accommodation" name="accommodation" class="field">
+              {domiki.map((d) => <option value={d.id} data-capacity={d.capacity}>{d.title} — до {d.capacity} гостей</option>)}
+            </select>
+          </div>
+          <div class="grid gap-6 sm:grid-cols-3">
+            <div>
+              <label class="field-label" for="checkIn">Заезд</label>
+              <input id="checkIn" name="checkIn" type="date" class="field" required aria-describedby="checkIn-error" />
+              <p id="checkIn-error" class="field-error" hidden></p>
+            </div>
+            <div>
+              <label class="field-label" for="checkOut">Выезд</label>
+              <input id="checkOut" name="checkOut" type="date" class="field" required aria-describedby="checkOut-error" />
+              <p id="checkOut-error" class="field-error" hidden></p>
+            </div>
+            <div>
+              <label class="field-label" for="guests">Гостей <span id="capacity-hint" class="normal-case tracking-normal"></span></label>
+              <input id="guests" name="guests" type="number" min="1" value="2" inputmode="numeric" class="field" required aria-describedby="guests-error" />
+              <p id="guests-error" class="field-error" hidden></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="grid gap-6">
+          <legend class="overline mb-6">02 · Контакты</legend>
+          <div class="grid gap-6 sm:grid-cols-2">
+            <div>
+              <label class="field-label" for="fullName">Имя и фамилия</label>
+              <input id="fullName" name="fullName" type="text" autocomplete="name" class="field" required aria-describedby="fullName-error" />
+              <p id="fullName-error" class="field-error" hidden></p>
+            </div>
+            <div>
+              <label class="field-label" for="phone">Телефон</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7 (978) 000-00-00" class="field" required aria-describedby="phone-error" />
+              <p id="phone-error" class="field-error" hidden></p>
+            </div>
+          </div>
+          <div>
+            <label class="field-label" for="email">Почта <span class="normal-case tracking-normal">— необязательно</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" class="field" aria-describedby="email-error" />
+            <p id="email-error" class="field-error" hidden></p>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="overline mb-6">03 · Что добавить к поездке</legend>
+          <div class="grid gap-px border border-line bg-line sm:grid-cols-2">
+            {
+              bookingActivities.map((a) => (
+                <label class="flex min-h-14 cursor-pointer items-center gap-4 bg-raised px-5 py-3 transition-colors hover:bg-surface">
+                  <input type="checkbox" name="activities" value={a.id} class="size-4 accent-[#7a5c33]" />
+                  <span>{a.label}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <div>
+          <label class="field-label" for="comment">Комментарий</label>
+          <textarea id="comment" name="comment" rows="4" class="field resize-y" placeholder="Пожелания, дни рождения, аллергии — всё, что важно знать заранее"></textarea>
+        </div>
+
+        <div>
+          <label class="flex cursor-pointer items-start gap-4">
+            <input id="consent" name="consent" type="checkbox" class="mt-1 size-4 shrink-0 accent-[#7a5c33]" aria-describedby="consent-error" />
+            <span class="text-sm leading-relaxed text-muted">
+              Даю <a href={url("/soglasie/")} target="_blank" class="text-accent underline underline-offset-4">согласие на обработку персональных данных</a>
+              и принимаю <a href={url("/politika-konfidencialnosti/")} target="_blank" class="text-accent underline underline-offset-4">политику конфиденциальности</a>.
+            </span>
+          </label>
+          <p id="consent-error" class="field-error" hidden></p>
+        </div>
+
+        <div>
+          <button type="submit" class="btn btn-dark w-full sm:w-auto">Сформировать заявку <Icon name="arrow" size={16} /></button>
+          <p id="form-note" class="mt-4 text-sm text-muted">Сайт не хранит ваши данные — заявку вы отправите нам сами, в Telegram или Max.</p>
+        </div>
+      </form>
+
+      <aside class="lg:sticky lg:top-28 lg:h-fit" aria-label="Расчёт стоимости">
+        <div data-tone="champagne" class="p-8 md:p-10">
+          <p class="overline">Предварительный расчёт</p>
+          <p id="quote-total" class="mt-5 font-display text-5xl" aria-live="polite">—</p>
+          <p id="quote-detail" class="mt-3 text-muted">Выберите даты заезда и выезда</p>
+          <ul class="mt-8 grid gap-3 border-t border-line pt-6 text-sm text-muted">
+            <li class="flex gap-3"><Icon name="coffee" size={18} class="shrink-0 text-accent" />Завтрак включён</li>
+            <li class="flex gap-3"><Icon name="moon" size={18} class="shrink-0 text-accent" />От {site.minNights} ночей, вся база — от 3</li>
+            <li class="flex gap-3"><Icon name="clock" size={18} class="shrink-0 text-accent" />Заезд с {site.checkIn}, выезд до {site.checkOut}</li>
+          </ul>
+        </div>
+        <div class="mt-6 grid gap-2 px-2 text-sm text-muted">
+          <p>Удобнее голосом?</p>
+          <a href={phoneUrl} class="flex min-h-11 items-center gap-3 text-fg"><Icon name="phone" size={18} class="text-accent" />{site.phone.display}</a>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Готовая заявка -->
+    <div id="result" class="container-site mt-16" hidden tabindex="-1" aria-labelledby="result-title">
+      <div data-tone="deep" class="grain grid gap-10 p-8 md:p-14 lg:grid-cols-[1fr_1fr]">
+        <div>
+          <p class="overline">Почти готово</p>
+          <h2 id="result-title" class="h2 mt-4">Отправьте заявку нам</h2>
+          <p class="lead mt-6">
+            Нажмите кнопку — текст скопируется, а чат откроется. Вставьте сообщение и отправьте.
+            Ответим в течение часа в дневное время.
+          </p>
+          <div class="mt-10 grid gap-3 sm:flex sm:flex-wrap">
+            <a id="send-telegram" href={telegramUrl} target="_blank" rel="noopener" class="btn btn-gold"><Icon name="send" size={16} />Скопировать и открыть Telegram</a>
+            <button id="copy-text" type="button" class="btn btn-outline"><Icon name="copy" size={16} /><span>Скопировать текст</span></button>
+          </div>
+          <p class="mt-6 text-sm text-muted">
+            В Max: найдите нас по номеру {site.max.display} и вставьте текст. Или просто позвоните: <a href={phoneUrl} class="text-fg underline underline-offset-4">{site.phone.display}</a>.
+          </p>
+          <p id="copy-status" class="mt-4 text-sm text-accent" role="status"></p>
+        </div>
+        <div>
+          <label for="message" class="field-label">Текст заявки</label>
+          <textarea id="message" readonly rows="12" class="field font-sans text-[0.9375rem] leading-relaxed"></textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { validateBooking, buildMessage, quote, type BookingInput } from "../lib/booking";
+  import { formatPrice, getAccommodation, isAccommodationId, minNightsFor, parseDate, pluralNights } from "../lib/price";
+  import { activityLabels } from "../data/bookingOptions";
+
+  const form = document.getElementById("booking-form") as HTMLFormElement;
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const accommodation = $<HTMLSelectElement>("accommodation");
+  const checkIn = $<HTMLInputElement>("checkIn");
+  const checkOut = $<HTMLInputElement>("checkOut");
+  const guests = $<HTMLInputElement>("guests");
+
+  const iso = (d: Date) =>
+    `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+  // Предзаполнение из ссылки: ?type=…&checkIn=…&checkOut=…&guests=…&activity=…
+  const params = new URLSearchParams(location.search);
+  const type = params.get("type");
+  if (type && isAccommodationId(type)) accommodation.value = type;
+  if (params.get("checkIn")) checkIn.value = params.get("checkIn")!;
+  if (params.get("checkOut")) checkOut.value = params.get("checkOut")!;
+  if (params.get("guests")) guests.value = params.get("guests")!;
+  for (const id of params.getAll("activity")) {
+    const box = form.querySelector<HTMLInputElement>(`input[name="activities"][value="${CSS.escape(id)}"]`);
+    if (box) box.checked = true;
+  }
+
+  checkIn.min = iso(new Date());
+
+  const readInput = (): BookingInput => {
+    const data = new FormData(form);
+    return {
+      fullName: String(data.get("fullName") ?? ""),
+      phone: String(data.get("phone") ?? ""),
+      email: String(data.get("email") ?? ""),
+      accommodation: accommodation.value,
+      checkIn: checkIn.value,
+      checkOut: checkOut.value,
+      guests: Number(guests.value),
+      activities: data.getAll("activities").map(String),
+      comment: String(data.get("comment") ?? ""),
+      consent: $<HTMLInputElement>("consent").checked,
+    };
+  };
+
+  const refresh = () => {
+    const id = accommodation.value;
+    if (!isAccommodationId(id)) return;
+    const capacity = getAccommodation(id).capacity;
+    guests.max = String(capacity);
+    $("capacity-hint").textContent = `(до ${capacity})`;
+
+    const start = parseDate(checkIn.value);
+    if (start) {
+      start.setDate(start.getDate() + minNightsFor(id));
+      checkOut.min = iso(start);
+    }
+
+    const q = quote(id, checkIn.value, checkOut.value);
+    const total = $("quote-total");
+    const detail = $("quote-detail");
+    if (!q) {
+      total.textContent = "—";
+      detail.textContent = "Выберите даты заезда и выезда";
+    } else if (q.nights < minNightsFor(id)) {
+      total.textContent = "—";
+      detail.textContent = `Минимум ${minNightsFor(id)} ${pluralNights(minNightsFor(id))}`;
+    } else {
+      total.textContent = formatPrice(q.total);
+      detail.textContent = `${q.nights} ${pluralNights(q.nights)} · ${getAccommodation(id).title} · без доп. услуг`;
+    }
+  };
+  form.addEventListener("input", refresh);
+  refresh();
+
+  // В порядке полей на странице — фокус уходит на первое ошибочное сверху
+  const fields = ["checkIn", "checkOut", "guests", "fullName", "phone", "email", "consent"] as const;
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const input = readInput();
+    const errors = validateBooking(input);
+
+    for (const name of fields) {
+      const el = $<HTMLInputElement>(name);
+      const err = $(`${name}-error`);
+      const message = errors[name];
+      el.setAttribute("aria-invalid", message ? "true" : "false");
+      err.textContent = message ?? "";
+      err.hidden = !message;
+    }
+    const firstInvalid = fields.find((n) => errors[n]);
+    if (firstInvalid) {
+      $(firstInvalid).focus();
+      return;
+    }
+
+    $<HTMLTextAreaElement>("message").value = buildMessage(input, activityLabels);
+    const result = $("result");
+    result.hidden = false;
+    result.scrollIntoView({ behavior: "smooth", block: "start" });
+    result.focus({ preventScroll: true });
+  });
+
+  const copy = async () => {
+    const text = $<HTMLTextAreaElement>("message").value;
+    const status = $("copy-status");
+    try {
+      await navigator.clipboard.writeText(text);
+      status.textContent = "Текст скопирован — вставьте его в чат.";
+    } catch {
+      $<HTMLTextAreaElement>("message").select();
+      status.textContent = "Скопируйте текст вручную: он выделен.";
+    }
+  };
+  $("copy-text").addEventListener("click", copy);
+  // Ссылка открывается штатно (это действие пользователя — не блокируется), текст копируется параллельно.
+  $("send-telegram").addEventListener("click", () => void copy());
+</script>

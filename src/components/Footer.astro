@@ -1,0 +1,82 @@
+---
+import Emblem from "./Emblem.astro";
+import Icon from "./Icon.astro";
+import { url } from "../lib/url";
+import { site, phoneUrl, telegramUrl, fullAddress } from "../data/site";
+
+const nav = [
+  { href: "/domiki/", label: "Домики и апартаменты" },
+  { href: "/aktivnosti/", label: "Активности" },
+  { href: "/degustacii/", label: "Дегустации и ферма" },
+  { href: "/akvazona/", label: "Аквазона" },
+  { href: "/pitanie/", label: "Питание" },
+  { href: "/prays/", label: "Прайс-лист" },
+  { href: "/kontakty/", label: "Контакты" },
+];
+const { legal } = site;
+const year = new Date().getFullYear();
+---
+
+<footer data-tone="deep" class="grain">
+  <div class="container-site pt-20 pb-10">
+    <div class="grid gap-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div>
+        <a href={url("/")} class="inline-flex items-center gap-3">
+          <Emblem class="text-accent" size={44} />
+          <span class="font-display text-lg tracking-[0.22em] uppercase">Лесная Обитель</span>
+        </a>
+        <p class="accent-italic mt-6 text-2xl text-fg">{site.tagline}</p>
+        <p class="mt-6 max-w-xs text-sm leading-relaxed text-muted">{fullAddress}</p>
+      </div>
+
+      <nav aria-label="Разделы сайта">
+        <p class="overline mb-5">Разделы</p>
+        <ul class="grid gap-1">
+          {nav.map((l) => <li><a href={url(l.href)} class="inline-block py-1.5 text-sm text-muted hover:text-fg">{l.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <div>
+        <p class="overline mb-5">Связь</p>
+        <ul class="grid gap-3 text-sm">
+          <li><a href={phoneUrl} class="flex min-h-10 items-center gap-3 text-fg"><Icon name="phone" size={18} class="text-accent" />{site.phone.display}</a></li>
+          <li><a href={telegramUrl} target="_blank" rel="noopener" class="flex min-h-10 items-center gap-3 text-fg"><Icon name="send" size={18} class="text-accent" />Telegram @{site.telegram}</a></li>
+          <li class="flex min-h-10 items-center gap-3 text-fg"><Icon name="message" size={18} class="text-accent" />Max · {site.max.display}</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="overline mb-5">Мы на площадках</p>
+        <ul class="grid gap-1 text-sm">
+          <li><a href={site.listings.cian} target="_blank" rel="noopener" class="inline-block py-1.5 text-muted hover:text-fg">Циан</a></li>
+          <li><a href={site.listings.avito} target="_blank" rel="noopener" class="inline-block py-1.5 text-muted hover:text-fg">Авито</a></li>
+        </ul>
+        <a href={url("/bron/")} class="btn btn-gold mt-8">Забронировать</a>
+      </div>
+    </div>
+
+    <div class="mt-16 grid gap-6 border-t border-line pt-8 text-xs leading-relaxed text-muted md:grid-cols-2">
+      <div class="grid gap-2">
+        <p>© {year} {site.name}</p>
+        {legal.operator && (
+          <p>
+            {legal.operator}
+            {legal.inn && <> · ИНН {legal.inn}</>}
+            {legal.ogrn && <> · ОГРН {legal.ogrn}</>}
+          </p>
+        )}
+        {legal.registry && <p>Номер в реестре объектов классификации: {legal.registry}</p>}
+        <p>
+          <a href={url("/politika-konfidencialnosti/")} class="underline-offset-4 hover:underline">Политика конфиденциальности</a>
+          <span aria-hidden="true"> · </span>
+          <a href={url("/soglasie/")} class="underline-offset-4 hover:underline">Согласие на обработку данных</a>
+        </p>
+      </div>
+      <p class="md:text-right">
+        <span class="mr-2 inline-flex items-center border border-line px-1.5 py-0.5 text-[0.6875rem] text-fg">18+</span>
+        Информация об алкогольной продукции предназначена для лиц старше 18 лет.
+        Чрезмерное употребление алкоголя вредит вашему здоровью.
+      </p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,119 @@
+---
+// Пейзаж для шапок страниц: гряды, скала Красный Камень, закатное солнце,
+// лес. Генерируется при сборке, детерминированно (одинаково при каждой сборке).
+interface Props {
+  class?: string;
+}
+const { class: className = "" } = Astro.props;
+
+type Pt = [number, number];
+
+function smooth(points: Pt[]): string {
+  let d = `M${points[0][0]} ${points[0][1]}`;
+  for (let i = 1; i < points.length - 1; i++) {
+    const [x, y] = points[i];
+    const [nx, ny] = points[i + 1];
+    d += ` Q${x} ${y} ${(x + nx) / 2} ${(y + ny) / 2}`;
+  }
+  const last = points[points.length - 1];
+  return `${d} L${last[0]} ${last[1]}`;
+}
+
+function rng(seed: number) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s + 0x6d2b79f5) >>> 0;
+    let t = Math.imul(s ^ (s >>> 15), s | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function forest(seed: number, base: number, minH: number, maxH: number, minW: number, maxW: number) {
+  const r = rng(seed);
+  let d = `M-40 900 L-40 ${base}`;
+  let x = -40;
+  while (x < 1480) {
+    const w = minW + r() * (maxW - minW);
+    const h = minH + r() * (maxH - minH);
+    d += ` L${x.toFixed(1)} ${base} L${(x + w / 2).toFixed(1)} ${(base - h).toFixed(1)} L${(x + w).toFixed(1)} ${base}`;
+    x += w * (0.45 + r() * 0.3);
+  }
+  return `${d} L1480 ${base} L1480 900 Z`;
+}
+
+const farPts: Pt[] = [
+  [0, 520], [140, 470], [260, 500], [380, 455], [520, 488], [640, 440],
+  [760, 470], [900, 420], [1040, 452], [1180, 410], [1320, 455], [1440, 430],
+];
+const midPts: Pt[] = [
+  [0, 650], [160, 612], [320, 640], [480, 604], [640, 636], [820, 598],
+  [980, 630], [1140, 602], [1300, 630], [1440, 606],
+];
+
+const farRidge = `${smooth(farPts)} L1440 900 L0 900 Z`;
+const midRidge = `${smooth(midPts)} L1440 900 L0 900 Z`;
+// Контурные линии — эхо дальней гряды
+const contours = [14, 30, 50, 74].map((dy, i) => ({
+  d: smooth(farPts.map(([x, y]) => [x, y - dy] as Pt)),
+  opacity: 0.16 - i * 0.03,
+}));
+
+const rock =
+  "M330 640 L450 600 L520 560 L560 520 L590 488 L610 470 L628 462 L650 458 L680 455 L705 459 L722 468 L728 485 L731 520 L736 540 L780 565 L850 600 L930 640 Z";
+const cliff = "M705 459 L722 468 L728 485 L731 520 L736 540 L718 548 L712 505 L708 475 Z";
+const rockEdge = "M450 600 L520 560 L560 520 L590 488 L610 470 L628 462 L650 458 L680 455 L705 459 L722 468";
+
+const midForest = forest(7, 742, 18, 46, 14, 24);
+const frontForest = forest(42, 812, 34, 96, 20, 38);
+---
+
+<svg
+  class={className}
+  viewBox="0 0 1440 900"
+  preserveAspectRatio="xMaxYMax slice"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <linearGradient id="ra-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0c1912" />
+      <stop offset="0.45" stop-color="#152a1f" />
+      <stop offset="0.72" stop-color="#24372a" />
+      <stop offset="0.86" stop-color="#3d4431" />
+    </linearGradient>
+    <radialGradient id="ra-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#d2b47c" stop-opacity="0.32" />
+      <stop offset="1" stop-color="#d2b47c" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="ra-rock" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c3429" />
+      <stop offset="1" stop-color="#2e1c18" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1440" height="900" fill="url(#ra-sky)" />
+  <circle cx="1010" cy="430" r="400" fill="url(#ra-glow)" />
+  <g fill="none" stroke="#d2b47c">
+    <circle cx="1010" cy="430" r="104" stroke-opacity="0.6" stroke-width="1" />
+    <circle cx="1010" cy="430" r="148" stroke-opacity="0.2" stroke-width="0.8" />
+    <circle cx="1010" cy="430" r="204" stroke-opacity="0.1" stroke-width="0.8" />
+  </g>
+
+  <g fill="none" stroke="#d2b47c" stroke-width="0.8">
+    {contours.map((c) => <path d={c.d} stroke-opacity={c.opacity} />)}
+  </g>
+  <path d={farRidge} fill="#1d3528" />
+
+  <!-- Скала справа, рядом с солнцем: слева остаётся спокойный фон под заголовок -->
+  <g transform="translate(560 0)">
+    <path d={rock} fill="url(#ra-rock)" />
+    <path d={cliff} fill="#24140f" fill-opacity="0.75" />
+    <path d={rockEdge} fill="none" stroke="#d2b47c" stroke-opacity="0.5" stroke-width="1.1" />
+  </g>
+
+  <path d={midRidge} fill="#152a1f" />
+  <path d={midForest} fill="#10221a" />
+  <path d={frontForest} fill="#0b170f" />
+</svg>

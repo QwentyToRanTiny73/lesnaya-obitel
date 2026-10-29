@@ -1,0 +1,330 @@
+@import "tailwindcss";
+
+/* ── Лесная Обитель · дизайн-система ─────────────────────────────
+   Палитра и шрифты — в @theme. Цвета текста НЕ задаются напрямую:
+   каждая секция объявляет тон (data-tone), а text-fg / text-muted /
+   text-accent / border-line берут значения из него. Так светлый текст
+   физически не может оказаться на светлом фоне.
+   Контраст всех пар проверяет tests/palette.test.ts (≥ 4.5:1).
+   ───────────────────────────────────────────────────────────────── */
+
+@theme {
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-accent: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter Variable", Inter, system-ui, sans-serif;
+
+  --color-ivory: #f7f2e9;
+  --color-champagne: #efe6d6;
+  --color-deep: #13241b;
+  --color-deep-2: #1a3026;
+  --color-gold: #b8925a;
+  --color-gold-light: #d2b47c;
+  --color-bronze: #7a5c33;
+  --color-moss: #7a8b6e;
+  --color-sage: #9caf88;
+  --color-claret: #6b2b30;
+  --color-rose: #c99a93;
+  --color-redstone: #4a2b24;
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --color-fg: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-accent: var(--accent);
+  --color-line: var(--line);
+  --color-surface: var(--bg);
+  --color-raised: var(--raised);
+}
+
+@layer base {
+  :root,
+  [data-tone="ivory"] {
+    --bg: #f7f2e9;
+    --raised: #fffdf8;
+    --fg: #1e2a22;
+    --fg-muted: #565c52;
+    --accent: #7a5c33;
+    --line: #ddd2be;
+  }
+  [data-tone="champagne"] {
+    --bg: #efe6d6;
+    --raised: #f8f3ea;
+    --fg: #1e2a22;
+    --fg-muted: #52584e;
+    --accent: #73562f;
+    --line: #d5c7ae;
+  }
+  [data-tone="deep"] {
+    --bg: #13241b;
+    --raised: #1a3026;
+    --fg: #f2ece1;
+    --fg-muted: #c2baa8;
+    --accent: #d2b47c;
+    --line: rgb(210 180 124 / 0.22);
+  }
+  [data-tone] {
+    background-color: var(--bg);
+    color: var(--fg);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem; /* под фиксированную шапку */
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--fg);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    color: var(--fg);
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+
+  :where(a, button, input, select, textarea, summary):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-deep);
+  }
+}
+
+@layer components {
+  .container-site {
+    width: 100%;
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+  }
+  .section {
+    padding-block: clamp(4.5rem, 10vw, 8rem);
+  }
+
+  /* Типографика */
+  .overline {
+    font: 500 0.6875rem/1.4 var(--font-sans);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .display {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6.25rem);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+  }
+  .h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.125rem, 4.2vw, 3.375rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+  .h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 2vw, 1.625rem);
+    line-height: 1.25;
+  }
+  .lead {
+    font-size: 1.125rem;
+    line-height: 1.75;
+    color: var(--fg-muted);
+  }
+  .accent-italic {
+    font-family: var(--font-accent);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  /* Кнопки — высота 48px (тач-цель ≥ 44px) */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    min-height: 3rem;
+    padding: 0 1.75rem;
+    font: 500 0.75rem/1 var(--font-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    transition: background-color 0.3s var(--ease-soft), color 0.3s var(--ease-soft),
+      border-color 0.3s var(--ease-soft);
+  }
+  .btn-gold {
+    background: var(--color-gold);
+    color: var(--color-deep);
+  }
+  .btn-gold:hover {
+    background: #c9a46b;
+  }
+  .btn-dark {
+    background: var(--color-deep);
+    color: var(--color-ivory);
+  }
+  .btn-dark:hover {
+    background: #22402f;
+  }
+  .btn-outline {
+    border-color: var(--accent);
+    color: var(--fg);
+  }
+  .btn-outline:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .link-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font: 500 0.75rem/1 var(--font-sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding-block: 0.75rem;
+  }
+  .link-arrow svg {
+    transition: transform 0.3s var(--ease-soft);
+  }
+  .link-arrow:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* Поля формы */
+  .field-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font: 500 0.6875rem/1.4 var(--font-sans);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .field {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    background: var(--raised);
+    border: 1px solid var(--line);
+    color: var(--fg);
+    font-size: 1rem;
+    border-radius: 0;
+    transition: border-color 0.2s;
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgb(184 146 90 / 0.25);
+  }
+  .field[aria-invalid="true"] {
+    border-color: #a5523f;
+  }
+  .field-error {
+    margin-top: 0.4rem;
+    font-size: 0.8125rem;
+    color: #9a4433;
+  }
+  [data-tone="deep"] .field-error {
+    color: #e5a08f;
+  }
+
+  /* Таблицы прайса */
+  .price-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .price-table th {
+    font: 500 0.6875rem/1.4 var(--font-sans);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    text-align: left;
+    padding: 0 1rem 1rem 0;
+    border-bottom: 1px solid var(--accent);
+  }
+  .price-table th[scope="row"] {
+    font: 400 1rem/1.45 var(--font-sans);
+    letter-spacing: normal;
+    text-transform: none;
+    color: var(--fg);
+    padding: 1.1rem 1rem 1.1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .price-table .sub {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--fg-muted);
+  }
+  .price-table td {
+    padding: 1.25rem 1rem 1.25rem 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  .price-table .num {
+    text-align: right;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+  }
+  .price-table th.num {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+  }
+
+  /* Тексты документов (политика, согласие) */
+  .doc h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+  }
+  .doc p + p {
+    margin-top: 0.75rem;
+  }
+  .doc ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    margin-block: 0.75rem;
+  }
+  .doc li + li {
+    margin-top: 0.25rem;
+  }
+  .doc a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* Зерно на тёмных секциях */
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
