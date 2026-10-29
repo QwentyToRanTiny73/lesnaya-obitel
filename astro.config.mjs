@@ -11,7 +11,8 @@ export default defineConfig({
   output: "static",
   integrations: [
     sitemap({
-      filter: (page) => !page.includes("/bron/spasibo/"),
+      // Служебные страницы (noindex) в карту сайта не попадают
+      filter: (page) => !/\/(politika-konfidencialnosti|soglasie|404)\/?$/.test(page),
     }),
   ],
   vite: {

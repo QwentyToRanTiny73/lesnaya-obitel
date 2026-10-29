@@ -71,7 +71,7 @@ const frontForest = forest(42, 812, 34, 96, 20, 38);
 <svg
   class={className}
   viewBox="0 0 1440 900"
-  preserveAspectRatio="xMidYMax slice"
+  preserveAspectRatio="xMaxYMax slice"
   xmlns="http://www.w3.org/2000/svg"
   aria-hidden="true"
   focusable="false"
@@ -88,8 +88,8 @@ const frontForest = forest(42, 812, 34, 96, 20, 38);
       <stop offset="1" stop-color="#d2b47c" stop-opacity="0" />
     </radialGradient>
     <linearGradient id="ra-rock" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#6a3a2c" />
-      <stop offset="1" stop-color="#3a221c" />
+      <stop offset="0" stop-color="#5c3429" />
+      <stop offset="1" stop-color="#2e1c18" />
     </linearGradient>
   </defs>
 
@@ -106,9 +106,12 @@ const frontForest = forest(42, 812, 34, 96, 20, 38);
   </g>
   <path d={farRidge} fill="#1d3528" />
 
-  <path d={rock} fill="url(#ra-rock)" />
-  <path d={cliff} fill="#2a1814" fill-opacity="0.7" />
-  <path d={rockEdge} fill="none" stroke="#d2b47c" stroke-opacity="0.55" stroke-width="1.1" />
+  <!-- Скала справа, рядом с солнцем: слева остаётся спокойный фон под заголовок -->
+  <g transform="translate(560 0)">
+    <path d={rock} fill="url(#ra-rock)" />
+    <path d={cliff} fill="#24140f" fill-opacity="0.75" />
+    <path d={rockEdge} fill="none" stroke="#d2b47c" stroke-opacity="0.5" stroke-width="1.1" />
+  </g>
 
   <path d={midRidge} fill="#152a1f" />
   <path d={midForest} fill="#10221a" />

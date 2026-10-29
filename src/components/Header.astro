@@ -19,20 +19,20 @@ const isCurrent = (href: string) => path.startsWith(url(href));
 
 <header id="site-header" data-tone="deep" data-scrolled="false" class="fixed inset-x-0 top-0 z-50">
   <div class="container-site flex h-20 items-center justify-between gap-6">
-    <a href={url("/")} class="flex items-center gap-3 text-fg" aria-label={`${site.name} — на главную`}>
+    <a href={url("/")} class="flex shrink-0 items-center gap-3 text-fg" aria-label={`${site.name} — на главную`}>
       <Emblem class="text-accent" />
-      <span class="font-display text-[1.0625rem] tracking-[0.22em] uppercase">Лесная Обитель</span>
+      <span class="whitespace-nowrap font-display text-[1.0625rem] tracking-[0.2em] uppercase">Лесная Обитель</span>
     </a>
 
     <nav aria-label="Основная навигация" class="hidden xl:block">
-      <ul class="flex items-center gap-8">
+      <ul class="flex items-center gap-5 2xl:gap-8">
         {
           links.map((l) => (
             <li>
               <a
                 href={url(l.href)}
                 aria-current={isCurrent(l.href) ? "page" : undefined}
-                class="nav-link text-[0.75rem] tracking-[0.18em] uppercase text-fg"
+                class="nav-link whitespace-nowrap text-[0.75rem] tracking-[0.12em] uppercase text-fg 2xl:tracking-[0.18em]"
               >
                 {l.label}
               </a>

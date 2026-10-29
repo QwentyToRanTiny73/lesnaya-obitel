@@ -1,0 +1,32 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import { site, fullAddress } from "../data/site";
+import { url } from "../lib/url";
+
+const operator = site.legal.operator ?? "база отдыха «Лесная Обитель»";
+---
+
+<Base title="Согласие на обработку персональных данных" description="Согласие на обработку персональных данных при бронировании в «Лесной Обители»." noindex>
+  <PageHero overline="Документ" title="Согласие на обработку персональных данных" />
+
+  <section data-tone="ivory" class="section">
+    <article class="container-site max-w-3xl space-y-6 doc leading-relaxed">
+      <p>
+        Отправляя заявку на бронирование, я свободно, своей волей и в своём интересе даю согласие оператору —
+        {operator} (адрес: {fullAddress}) — на обработку моих персональных данных на условиях ниже.
+      </p>
+      <p><strong class="font-medium">Перечень данных:</strong> фамилия, имя, номер телефона, адрес электронной почты (если указан), даты поездки, число гостей, выбранные услуги, текст комментария.</p>
+      <p><strong class="font-medium">Цели:</strong> обработка заявки, бронирование и оказание услуг проживания и досуга, связь по вопросам поездки.</p>
+      <p>
+        <strong class="font-medium">Действия с данными:</strong> сбор, запись, систематизация, хранение, уточнение, использование, удаление —
+        с использованием средств автоматизации и без них. Передача третьим лицам — только партнёрам, оказывающим выбранные мной услуги.
+      </p>
+      <p><strong class="font-medium">Срок:</strong> до достижения целей обработки или до отзыва согласия.</p>
+      <p>
+        Согласие можно отозвать в любой момент, написав оператору по телефону {site.phone.display} или в Telegram @{site.telegram}.
+        Подробнее — в <a href={url("/politika-konfidencialnosti/")} class="text-accent underline underline-offset-4">политике конфиденциальности</a>.
+      </p>
+    </article>
+  </section>
+</Base>

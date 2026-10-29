@@ -1,0 +1,60 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import ActivityCard from "../components/ActivityCard.astro";
+import Icon from "../components/Icon.astro";
+import activities from "../data/activities.json";
+import { url } from "../lib/url";
+---
+
+<Base
+  title="Активности и досуг"
+  description="Теренкур, подъём на Красный Камень, устричная ферма «Причал 12», электробайки Talaria TL2500, конные прогулки, дайвинг, светящиеся сапы, рыбалка, йога."
+>
+  <PageHero
+    overline="Досуг"
+    title="Активности"
+    lead="Лес, горы и море в получасе. Ничего обязательного — только то, что хочется. Любую активность можно добавить к заявке на бронирование."
+  />
+
+  <section data-tone="ivory" class="section">
+    <div class="container-site">
+      <SectionHeading overline="Наши" title="Активности базы" lead="Проводим сами — с нашими гидами и на нашей технике." />
+      <div class="mt-14 grid gap-6 md:grid-cols-2">
+        {activities.own.map((a) => <ActivityCard activity={a} kind="own" />)}
+      </div>
+    </div>
+  </section>
+
+  <section data-tone="champagne" class="section">
+    <div class="container-site">
+      <SectionHeading overline="С партнёрами" title="Дополнительно" lead="Проверенные партнёры Южного берега. Договоримся о времени и встретим у ворот." />
+      <div class="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {activities.partner.map((a) => <ActivityCard activity={a} kind="partner" />)}
+      </div>
+    </div>
+  </section>
+
+  <section data-tone="deep" class="section grain">
+    <div class="container-site">
+      <SectionHeading overline="Особое" title="Вечера и события" />
+      <div class="mt-14 grid gap-6 md:grid-cols-2">
+        {
+          activities.special.map((s) => (
+            <article class="border border-line bg-raised p-8 md:p-10">
+              <Icon name={s.icon} size={30} class="text-accent" />
+              <h3 class="h3 mt-6">{s.title}</h3>
+              <p class="mt-3 text-muted">{s.description}</p>
+              <div class="mt-8 flex flex-wrap items-baseline justify-between gap-4 border-t border-line pt-5">
+                <p class="font-display text-xl">{s.price}</p>
+                <p class="text-sm text-muted">{s.schedule}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+      <a href={url("/bron/")} class="btn btn-gold mt-14">Забронировать и выбрать активности</a>
+    </div>
+  </section>
+</Base>

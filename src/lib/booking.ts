@@ -99,5 +99,6 @@ export function buildMessage(input: BookingInput, activityLabels: Record<string,
   ]
     .filter((line) => line !== null)
     .join("\n")
-    .replace(/ | /g, " ");
+    .replace(/ | /g, " ")
+    .replace(/⁠/g, "");
 }

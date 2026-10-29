@@ -13,3 +13,6 @@ public/prays.pdf
 *.pem
 .env*
 *.tsbuildinfo
+
+# локальные настройки Claude Code
+.claude/

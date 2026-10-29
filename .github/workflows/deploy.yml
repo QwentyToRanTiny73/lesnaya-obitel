@@ -31,6 +31,9 @@ jobs:
       - name: Unit tests (цены, валидация, контраст палитры)
         run: bun run test
 
+      - name: Проверка типов
+        run: bun run check
+
       # prebuild генерирует PDF-прайс, postbuild проверяет ссылки,
       # запрещённые слова и устаревшие контакты в готовом HTML.
       - name: Build + проверка dist

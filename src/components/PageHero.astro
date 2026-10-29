@@ -13,7 +13,10 @@ const height = size === "full" ? "min-h-[100svh]" : "min-h-[62svh] md:min-h-[68s
 ---
 
 <section data-tone="deep" class:list={["grain relative flex items-end overflow-hidden", height]}>
-  <RidgeArt class="absolute inset-0 -z-10 h-full w-full" />
+  <!-- На телефоне пейзаж занимает нижнюю часть и растворяется вверху: заголовок на чистом небе -->
+  <RidgeArt
+    class="absolute inset-x-0 bottom-0 -z-10 h-[60%] w-full [mask-image:linear-gradient(to_bottom,transparent,black_35%)] md:h-full md:[mask-image:none]"
+  />
   <div class="absolute inset-x-0 bottom-0 -z-10 h-2/5 bg-gradient-to-t from-[#0b170f] to-transparent"></div>
   <div class:list={["container-site relative", size === "full" ? "pb-40 md:pb-48 pt-32" : "pb-16 md:pb-24 pt-36"]}>
     {overline && <p class="overline mb-6">{overline}</p>}

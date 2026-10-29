@@ -1,0 +1,76 @@
+---
+import Base from "../../layouts/Base.astro";
+import PageHero from "../../components/PageHero.astro";
+import ArtTile from "../../components/ArtTile.astro";
+import Icon from "../../components/Icon.astro";
+import domiki from "../../data/domiki.json";
+import { site } from "../../data/site";
+import { url } from "../../lib/url";
+import { formatPrice, seasonLabels, seasonMonths, type Season } from "../../lib/price";
+
+const seasons: Season[] = ["offseason", "season", "peak"];
+const tones = ["deep", "redstone", "moss", "claret"] as const;
+const icons = ["bath", "house", "trees", "key"];
+---
+
+<Base
+  title="Домики и апартаменты"
+  description="Четырнадцать домиков и апартаменты на восьми гектарах леса у Красного Камня. Апартаменты с джакузи, домики на 4 и на 6–8 гостей, аренда всей базы. Завтрак включён."
+>
+  <PageHero
+    overline="Размещение"
+    title="Домики и апартаменты"
+    lead="Четырнадцать домиков и апартаменты на восьми гектарах. Каждый — с видом на лес или горы, на расстоянии от соседей. Завтрак включён во все тарифы."
+  />
+
+  <section data-tone="ivory" class="section">
+    <div class="container-site grid gap-24">
+      {
+        domiki.map((d, i) => (
+          <article class:list={["grid items-center gap-10 lg:grid-cols-2 lg:gap-20", i % 2 === 1 && "lg:[&>*:first-child]:order-2"]}>
+            <ArtTile icon={icons[i]} tone={tones[i]} seed={i + 3} ratio="5 / 4" />
+            <div>
+              <p class="overline">{d.highlight}</p>
+              <h2 class="h2 mt-4">{d.title}</h2>
+              <p class="accent-italic mt-3 text-2xl text-muted">{d.subtitle}</p>
+              <p class="mt-6 leading-relaxed text-muted">{d.description}</p>
+
+              <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm">
+                {d.features.map((f) => (
+                  <li class="flex items-center gap-2"><Icon name={f.icon} size={18} class="text-accent" />{f.label}</li>
+                ))}
+              </ul>
+
+              <table class="price-table mt-10">
+                <caption class="sr-only">Стоимость за сутки — {d.title}</caption>
+                <tbody>
+                  {seasons.filter((s) => d.prices[s] !== null).map((s) => (
+                    <tr>
+                      <th scope="row">
+                        {seasonLabels[s]} <span class="sub">{seasonMonths[s]}</span>
+                      </th>
+                      <td class="num">{d.pricePrefix ? `${d.pricePrefix} ` : ""}{formatPrice(d.prices[s]!)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {d.minNights && <p class="mt-3 text-sm text-muted">Минимальный срок — {d.minNights} ночи</p>}
+
+              <div class="mt-8 flex flex-wrap gap-4">
+                <a href={url(`/bron/?type=${d.id}`)} class="btn btn-dark">Забронировать</a>
+                <a href={url(`/domiki/${d.slug}/`)} class="btn btn-outline">Подробнее</a>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section data-tone="champagne" class="py-16">
+    <div class="container-site flex flex-col items-center gap-3 text-center">
+      <p class="accent-italic text-3xl">Минимальный срок проживания — {site.minNights} ночи.</p>
+      <p class="text-muted">Заезд с {site.checkIn}, выезд до {site.checkOut}. Ранний заезд и поздний выезд — по договорённости.</p>
+    </div>
+  </section>
+</Base>
