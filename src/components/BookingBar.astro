@@ -1,0 +1,36 @@
+---
+// Быстрый подбор дат: обычная GET-форма, работает без JavaScript.
+import domiki from "../data/domiki.json";
+import Icon from "./Icon.astro";
+import { url } from "../lib/url";
+---
+
+<form
+  action={url("/bron/")}
+  method="get"
+  data-tone="ivory"
+  class="grid gap-px border border-line bg-line shadow-[0_30px_60px_-30px_rgb(11_23_15/0.5)] md:grid-cols-[1.4fr_1fr_1fr_0.7fr_auto]"
+  aria-label="Подбор дат"
+>
+  <label class="bg-raised px-5 py-4">
+    <span class="field-label">Размещение</span>
+    <select name="type" class="w-full bg-transparent py-1 text-base text-fg outline-none">
+      {domiki.map((d) => <option value={d.id} selected={d.id === "domik-6-8"}>{d.title}</option>)}
+    </select>
+  </label>
+  <label class="bg-raised px-5 py-4">
+    <span class="field-label">Заезд</span>
+    <input type="date" name="checkIn" class="w-full bg-transparent py-1 text-base text-fg outline-none" />
+  </label>
+  <label class="bg-raised px-5 py-4">
+    <span class="field-label">Выезд</span>
+    <input type="date" name="checkOut" class="w-full bg-transparent py-1 text-base text-fg outline-none" />
+  </label>
+  <label class="bg-raised px-5 py-4">
+    <span class="field-label">Гостей</span>
+    <input type="number" name="guests" min="1" max="80" value="2" inputmode="numeric" class="w-full bg-transparent py-1 text-base text-fg outline-none" />
+  </label>
+  <button type="submit" class="btn btn-dark h-full min-h-16 px-8">
+    Проверить даты <Icon name="arrow" size={16} />
+  </button>
+</form>
