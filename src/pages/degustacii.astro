@@ -3,9 +3,11 @@ import Base from "../layouts/Base.astro";
 import PageHero from "../components/PageHero.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import Icon from "../components/Icon.astro";
+import Photo from "../components/Photo.astro";
 import wines from "../data/wines.json";
 import prices from "../data/prices.json";
-import { site, telegramUrl } from "../data/site";
+import { photos } from "../data/photos";
+import { telegramUrl } from "../data/site";
 import { url } from "../lib/url";
 import { formatPrice } from "../lib/price";
 
@@ -13,32 +15,36 @@ const typeLabel: Record<string, string> = { red: "Красное", rose: "Роз
 const typeDot: Record<string, string> = { red: "bg-[#a4473f]", rose: "bg-rose", white: "bg-gold-light" };
 
 const range = (min: number, max: number | null) =>
-  !max || min === max ? formatPrice(min) : `${formatPrice(min).replace(/ ₽$/, "")}–${formatPrice(max)}`;
+  !max || min === max ? formatPrice(min) : `${formatPrice(min).replace(/\u00a0₽$/, "")}–${formatPrice(max)}`;
+const unit = (u: string) => u.replace("₽", "").trim();
+const num = (n: number) => String(n).replace(".", ",");
 
 const farm = [
   { icon: "egg", title: "Птичий двор", text: "Куры, гуси, утки, цесарки. Свежие яйца каждое утро." },
   { icon: "leaf", title: "Мясо и заготовки", text: "Своя свинина и птица, домашние заготовки, компоты." },
-  { icon: "shell", title: "«Причал 12»", text: "Устрицы, мидии и креветки с нашей фермы на Донузлаве — по заказу." },
-  { icon: "wheat", title: "Сувениры", text: "Фермерские чипсы из мяса — с собой, от 500 ₽ за упаковку." },
+  { icon: "shell", title: "Донузлав", text: "Устрицы, мидии и креветки с фермы «Причал 12» — под заказ." },
+  { icon: "wheat", title: "Сувениры", text: "Чипсы из фермерского мяса — с собой, от 500 ₽ за упаковку." },
 ];
 ---
 
 <Base
-  title="Дегустации и ферма"
-  description="Вина собственного производства у Красного Камня: Каберне-Сира, Саперави, Розе, Мускат, Кокур. Устрицы, мидии и креветки с «Причала 12», устричное пиво. Ферма."
+  title="Вино и морепродукты"
+  description="Сухие вина Красного Камня урожая 2025: Кокур, Мускат, Розе — от 3 500 ₽ за бутылку. Устрицы с Донузлава от 420 ₽ за штуку, мидии, королевские креветки, крафтовое пиво. Дегустации и ферма."
 >
   <PageHero
-    overline="Винодельня и ферма"
-    title="Дегустации"
-    lead="Вино с нашей лозы — от виноградника до бокала у Красного Камня. Морепродукты с Донузлава. Устричное пиво."
+    overline="Дегустации и ферма"
+    title="Вино и устрицы"
+    lead="Сухие вина Красного Камня урожая 2025 года, устрицы, мидии и креветки с Донузлава, крафтовое пиво. Можно прийти на дегустацию или заказать всё это к ужину."
+    photo={photos.rybalka}
   />
 
+  <!-- Вина -->
   <section data-tone="deep" class="section grain">
     <div class="container-site">
       <SectionHeading
-        overline="Наши вина"
-        title="От лозы до бокала"
-        lead="Виноградники у скалы Красный Камень. Лоза, давильня, бочка, бутылка — всё здесь, на нашей территории."
+        overline="Вино"
+        title="Вина урожая 2025"
+        lead="Малая серия Роберта Стабблбайна с виноградников Красного Камня, высоко в горах над Гурзуфом. Виноград собран вручную, все вина сухие."
       />
       <div class="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {
@@ -46,15 +52,40 @@ const farm = [
             <article class="flex flex-col border border-line bg-raised p-8">
               <p class="flex items-center gap-2 text-[0.6875rem] tracking-[0.18em] uppercase text-muted">
                 <span class:list={["size-2 rounded-full", typeDot[w.type]]} aria-hidden="true" />
-                {typeLabel[w.type]}
+                {w.style}
+                {w.vintage && <span aria-hidden="true">·</span>}
+                {w.vintage && <span>урожай {w.vintage}</span>}
               </p>
               <h3 class="accent-italic mt-5 text-[2.25rem] leading-none">{w.name}</h3>
               <p class="mt-3 text-accent">{w.profile}</p>
               <p class="mt-5 leading-relaxed text-muted">{w.description}</p>
-              <dl class="mt-auto grid gap-1 border-t border-line pt-5 text-sm">
+              <dl class="mt-6 grid gap-1 border-t border-line pt-5 text-sm">
+                <div class="flex justify-between gap-4"><dt class="shrink-0 text-muted">Сорт</dt><dd class="text-right">{w.grapes}</dd></div>
+                {w.alcohol && <div class="flex justify-between gap-4"><dt class="shrink-0 text-muted">Крепость</dt><dd>{num(w.alcohol)} %</dd></div>}
+                {w.sugar !== null && <div class="flex justify-between gap-4"><dt class="shrink-0 text-muted">Сахар</dt><dd>{num(w.sugar)} г/л</dd></div>}
                 <div class="flex justify-between gap-4"><dt class="shrink-0 text-muted">К столу</dt><dd class="text-right">{w.pairing}</dd></div>
                 <div class="flex justify-between gap-4"><dt class="shrink-0 text-muted">Подача</dt><dd>{w.temperature}</dd></div>
               </dl>
+              <div class="mt-auto pt-6">
+                {
+                  w.priceBottle ? (
+                    <dl class="grid grid-cols-2 gap-4 border-t border-accent pt-5">
+                      <div>
+                        <dt class="text-xs text-muted">Бутылка {num(w.volume)} л</dt>
+                        <dd class="mt-1 font-display text-2xl">{formatPrice(w.priceBottle)}</dd>
+                      </div>
+                      {w.priceGlass && (
+                        <div>
+                          <dt class="text-xs text-muted">Бокал 150 мл</dt>
+                          <dd class="mt-1 font-display text-2xl">{formatPrice(w.priceGlass)}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  ) : (
+                    <p class="border-t border-accent pt-5 text-sm text-muted">Цену и наличие уточняйте у администратора</p>
+                  )
+                }
+              </div>
             </article>
           ))
         }
@@ -62,13 +93,81 @@ const farm = [
     </div>
   </section>
 
+  <!-- Морепродукты и пиво -->
   <section data-tone="ivory" class="section">
     <div class="container-site grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
       <SectionHeading
-        overline="Форматы"
-        title="Что попробовать"
-        lead="Дегустации проходят по записи. Укажите формат в заявке на бронирование или напишите нам."
+        overline="Под заказ"
+        title="Морепродукты с Донузлава"
+        lead="Устрицы, мидии и креветки привозим с фермы «Причал 12» на озере Донузлав. Закажите заранее, лучше сразу при бронировании. Можно взять свежими и приготовить самим или заказать готовыми — на гриле, в белом вине, в бульоне."
       />
+      <div class="grid gap-14">
+        <div class="overflow-x-auto">
+          <table class="price-table min-w-[30rem]">
+            <caption class="sr-only">Морепродукты, цены</caption>
+            <thead>
+              <tr><th scope="col">Что</th><th scope="col" class="num">Цена</th></tr>
+            </thead>
+            <tbody>
+              {
+                prices.seafood.map((s) => (
+                  <tr>
+                    <th scope="row">
+                      {s.item}
+                      <span class="sub">{s.detail}</span>
+                    </th>
+                    <td class="num">
+                      {formatPrice(s.price)}
+                      <span class="block font-sans text-xs text-muted">{unit(s.unit)}</span>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h3 class="h3">Пиво</h3>
+          <table class="price-table mt-4">
+            <caption class="sr-only">Пиво, цены</caption>
+            <tbody>
+              {
+                prices.beer.map((b) => (
+                  <tr>
+                    <th scope="row">
+                      {b.item}
+                      <span class="sub">{b.detail}</span>
+                    </th>
+                    <td class="num">
+                      {formatPrice(b.price)}
+                      <span class="block font-sans text-xs text-muted">{unit(b.unit)}</span>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Форматы -->
+  <section data-tone="champagne" class="section">
+    <div class="container-site grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+      <div>
+        <SectionHeading
+          overline="Дегустации"
+          title="Что заказать вечером"
+          lead="Дегустации и ужины из морепродуктов — по записи. Отметьте формат в заявке на бронирование или напишите нам."
+        />
+        <figure class="mt-10">
+          <div class="relative aspect-[4/3] overflow-hidden">
+            <Photo photo={photos.degustaciya} sizes="(min-width: 1024px) 440px, 100vw" class="absolute inset-0 h-full w-full object-cover" />
+          </div>
+          <figcaption class="mt-3 text-sm text-muted">{photos.degustaciya.caption}</figcaption>
+        </figure>
+      </div>
       <div class="overflow-x-auto">
         <table class="price-table min-w-[34rem]">
           <caption class="sr-only">Форматы дегустаций и цены</caption>
@@ -84,7 +183,7 @@ const farm = [
                   <td class="num">
                     {d.priceMax === null ? "от " : ""}
                     {range(d.priceMin, d.priceMax)}
-                    <span class="block font-sans text-xs text-muted">{d.unit.replace("₽", "").trim()}</span>
+                    <span class="block font-sans text-xs text-muted">{unit(d.unit)}</span>
                   </td>
                 </tr>
               ))
@@ -95,9 +194,10 @@ const farm = [
     </div>
   </section>
 
-  <section data-tone="champagne" class="section">
+  <!-- Ферма -->
+  <section data-tone="ivory" class="section">
     <div class="container-site">
-      <SectionHeading overline="Ферма" title="Как еда попадает на стол" />
+      <SectionHeading overline="Ферма" title="Откуда продукты" />
       <ul class="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {
           farm.map((f) => (
@@ -112,16 +212,16 @@ const farm = [
     </div>
   </section>
 
-  <section data-tone="ivory" class="section">
+  <section data-tone="champagne" class="section">
     <div class="container-site max-w-3xl text-center">
       <h2 class="h2">Записаться на дегустацию</h2>
-      <p class="lead mx-auto mt-6">Напишите удобный день — подберём формат под вашу компанию.</p>
+      <p class="lead mx-auto mt-6">Напишите, в какой день и сколько вас будет, — подберём формат и закажем морепродукты к вашему приезду.</p>
       <div class="mt-10 flex flex-wrap justify-center gap-4">
-        <a href={url("/bron/?activity=degustacia")} class="btn btn-dark">Добавить к брони</a>
+        <a href={url("/bron/?activity=degustacia&activity=moreprodukty")} class="btn btn-dark">Добавить к брони</a>
         <a href={telegramUrl} target="_blank" rel="noopener" class="btn btn-outline"><Icon name="send" size={16} />Telegram</a>
       </div>
       <p class="mt-10 text-xs leading-relaxed text-muted">
-        18+. Чрезмерное употребление алкоголя вредит вашему здоровью. Дегустации проводятся только для совершеннолетних гостей.
+        18+. Чрезмерное употребление алкоголя вредит вашему здоровью. Вино и пиво — только для совершеннолетних гостей, на территории базы.
       </p>
     </div>
   </section>

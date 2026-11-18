@@ -1,0 +1,30 @@
+---
+// Фото из src/data/photos.ts → <picture> с WebP нескольких размеров.
+import { Picture } from "astro:assets";
+import type { SitePhoto } from "../data/photos";
+
+interface Props {
+  photo: SitePhoto;
+  /** Ширина фото на странице — браузер выберет подходящий файл */
+  sizes?: string;
+  class?: string;
+  /** Первый экран: грузить сразу, а не по прокрутке */
+  priority?: boolean;
+}
+const { photo, sizes = "100vw", class: className = "", priority = false } = Astro.props;
+const widths = [480, 800, 1200, 1600, 2000].filter((w) => w < photo.src.width).concat(photo.src.width);
+---
+
+<Picture
+  src={photo.src}
+  alt={photo.alt}
+  widths={widths}
+  sizes={sizes}
+  formats={["webp"]}
+  quality={78}
+  loading={priority ? "eager" : "lazy"}
+  fetchpriority={priority ? "high" : "auto"}
+  decoding="async"
+  class={className}
+  style={photo.position ? `object-position:${photo.position}` : undefined}
+/>

@@ -3,9 +3,11 @@ import ArtTile from "./ArtTile.astro";
 import Icon from "./Icon.astro";
 import { url } from "../lib/url";
 import { formatPrice } from "../lib/price";
+import { domikPhotos } from "../data/photos";
 
 interface Props {
   domik: {
+    id: string;
     slug: string;
     title: string;
     subtitle: string;
@@ -24,7 +26,14 @@ const icons = ["bath", "house", "trees", "key"];
 
 <article class="group flex flex-col border border-line bg-raised transition-shadow duration-500 hover:shadow-[0_24px_48px_-24px_rgb(19_36_27/0.35)]">
   <a href={url(`/domiki/${domik.slug}/`)} tabindex="-1" aria-hidden="true" class="block overflow-hidden">
-    <ArtTile icon={icons[index % 4]} tone={tones[index % 4]} seed={index + 3} class="transition-transform duration-700 group-hover:scale-[1.03]" />
+    <ArtTile
+      icon={icons[index % 4]}
+      tone={tones[index % 4]}
+      seed={index + 3}
+      photo={domikPhotos[domik.id]}
+      sizes="(min-width: 1280px) 290px, (min-width: 768px) 50vw, 100vw"
+      class="transition-transform duration-700 group-hover:scale-[1.03]"
+    />
   </a>
   <div class="flex flex-1 flex-col p-7">
     <p class="overline">{domik.highlight}</p>

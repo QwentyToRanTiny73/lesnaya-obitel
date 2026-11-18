@@ -1,5 +1,7 @@
 ---
 import RidgeArt from "./RidgeArt.astro";
+import Photo from "./Photo.astro";
+import type { SitePhoto } from "../data/photos";
 
 interface Props {
   overline?: string;
@@ -7,17 +9,32 @@ interface Props {
   lead?: string;
   /** full — первый экран главной, page — шапка внутренней страницы */
   size?: "full" | "page";
+  /** Фото на фон шапки; без него — рисованный пейзаж */
+  photo?: SitePhoto;
 }
-const { overline, title, lead, size = "page" } = Astro.props;
+const { overline, title, lead, size = "page", photo } = Astro.props;
 const height = size === "full" ? "min-h-[100svh]" : "min-h-[62svh] md:min-h-[68svh]";
 ---
 
 <section data-tone="deep" class:list={["grain relative flex items-end overflow-hidden", height]}>
-  <!-- На телефоне пейзаж занимает нижнюю часть и растворяется вверху: заголовок на чистом небе -->
-  <RidgeArt
-    class="absolute inset-x-0 bottom-0 -z-10 h-[60%] w-full [mask-image:linear-gradient(to_bottom,transparent,black_35%)] md:h-full md:[mask-image:none]"
-  />
-  <div class="absolute inset-x-0 bottom-0 -z-10 h-2/5 bg-gradient-to-t from-[#0b170f] to-transparent"></div>
+  {
+    photo ? (
+      <>
+        <Photo photo={photo} priority class="absolute inset-0 -z-20 h-full w-full object-cover" />
+        <!-- Затемнение: сверху — под светлое меню, снизу — под заголовок -->
+        <div class="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-[#0b170f]/60 to-transparent" />
+        <div class="absolute inset-x-0 bottom-0 -z-10 h-[70%] bg-gradient-to-t from-[#0b170f]/95 via-[#0b170f]/60 to-transparent" />
+      </>
+    ) : (
+      <>
+        <!-- На телефоне пейзаж занимает нижнюю часть и растворяется вверху: заголовок на чистом небе -->
+        <RidgeArt
+          class="absolute inset-x-0 bottom-0 -z-10 h-[60%] w-full [mask-image:linear-gradient(to_bottom,transparent,black_35%)] md:h-full md:[mask-image:none]"
+        />
+        <div class="absolute inset-x-0 bottom-0 -z-10 h-2/5 bg-gradient-to-t from-[#0b170f] to-transparent" />
+      </>
+    )
+  }
   <div class:list={["container-site relative", size === "full" ? "pb-40 md:pb-48 pt-32" : "pb-16 md:pb-24 pt-36"]}>
     {overline && <p class="overline mb-6">{overline}</p>}
     {

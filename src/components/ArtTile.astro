@@ -1,19 +1,20 @@
 ---
-// Художественная плитка вместо фотографии. Когда появятся настоящие снимки,
-// передайте src (файл из public/images/) — плитка покажет фото.
+// Плитка под фото. Есть фото (photo из src/data/photos.ts) — показывает его,
+// нет — художественную заглушку с иконкой.
 import Icon from "./Icon.astro";
-import { url } from "../lib/url";
+import Photo from "./Photo.astro";
+import type { SitePhoto } from "../data/photos";
 
 interface Props {
   icon: string;
   seed?: number;
   tone?: "deep" | "moss" | "redstone" | "claret";
   ratio?: string;
-  src?: string;
-  alt?: string;
+  photo?: SitePhoto;
+  sizes?: string;
   class?: string;
 }
-const { icon, seed = 1, tone = "deep", ratio = "4 / 3", src, alt = "", class: className = "" } = Astro.props;
+const { icon, seed = 1, tone = "deep", ratio = "4 / 3", photo, sizes, class: className = "" } = Astro.props;
 
 const fills = {
   deep: ["#13241b", "#1d3528"],
@@ -30,8 +31,8 @@ const rings = [14, 26, 40, 56, 74, 94];
 
 <div class:list={["relative overflow-hidden", className]} style={`aspect-ratio:${ratio}`}>
   {
-    src ? (
-      <img src={url(src)} alt={alt} loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
+    photo ? (
+      <Photo photo={photo} sizes={sizes} class="absolute inset-0 h-full w-full object-cover" />
     ) : (
       <>
         <svg class="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">

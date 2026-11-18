@@ -4,13 +4,15 @@ import PageHero from "../components/PageHero.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import Icon from "../components/Icon.astro";
 import { site, phoneUrl, telegramUrl, fullAddress } from "../data/site";
+import Photo from "../components/Photo.astro";
+import { photos } from "../data/photos";
 
 const mapUrl = `https://yandex.ru/maps/?text=${encodeURIComponent(fullAddress)}`;
 
 const routes = [
-  { from: "Из Ялты", text: "Около 20 минут на машине по трассе Ялта — Гурзуф, поворот на Краснокаменку." },
-  { from: "Из Симферополя", text: "Около полутора часов по трассе Симферополь — Ялта, далее через Гурзуф." },
-  { from: "Трансфер", text: "Встретим в аэропорту Симферополя или в Ялте — договоримся при бронировании." },
+  { from: "Из Ялты", text: "Около 20 минут на машине: по трассе на Гурзуф, затем поворот на Краснокаменку." },
+  { from: "Из Симферополя", text: "Около полутора часов по трассе Симферополь — Ялта, дальше через Гурзуф." },
+  { from: "Трансфер", text: "Встретим в аэропорту Симферополя или в Ялте. Договоримся при бронировании." },
 ];
 const nearby = [
   ["Скала Красный Камень", "5 минут пешком"],
@@ -26,7 +28,7 @@ const nearby = [
   <section data-tone="ivory" class="section">
     <div class="container-site grid gap-16 lg:grid-cols-2 lg:gap-24">
       <div>
-        <SectionHeading overline="Напишите или позвоните" title="Мы на связи" lead="Отвечаем в течение часа в дневное время. Быстрее всего — в Telegram." />
+        <SectionHeading overline="Напишите или позвоните" title="Мы на связи" lead="Днём отвечаем в течение часа. Быстрее всего — в Telegram." />
         <ul class="mt-12 border-t border-line">
           <li class="border-b border-line">
             <a href={phoneUrl} class="flex min-h-20 items-center gap-6 py-4">
@@ -72,6 +74,13 @@ const nearby = [
             {nearby.map(([place, time]) => <div class="flex justify-between gap-4"><dt>{place}</dt><dd class="text-muted">{time}</dd></div>)}
           </dl>
         </div>
+
+        <figure class="mt-14">
+          <div class="relative aspect-[4/3] overflow-hidden">
+            <Photo photo={photos.vezdSkala} sizes="(min-width: 1024px) 560px, 100vw" class="absolute inset-0 h-full w-full object-cover" />
+          </div>
+          <figcaption class="mt-3 text-sm text-muted">{photos.vezdSkala.caption}</figcaption>
+        </figure>
 
         <h2 class="h3 mt-14">Как добраться</h2>
         <ul class="mt-6 grid gap-6">

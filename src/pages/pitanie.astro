@@ -5,13 +5,20 @@ import SectionHeading from "../components/SectionHeading.astro";
 import Icon from "../components/Icon.astro";
 import breakfasts from "../data/breakfasts.json";
 import { url } from "../lib/url";
+import Photo from "../components/Photo.astro";
+import { photos } from "../data/photos";
 ---
 
 <Base
   title="Питание и завтраки"
-  description="Завтрак включён в стоимость проживания. Три формата: лёгкий, фермерский и ресторанный. Продукты с собственной фермы."
+  description="Завтрак включён в стоимость проживания. Три формата: лёгкий, фермерский и ресторанный. Продукты с собственной фермы, к ужину — устрицы, мидии и вино."
 >
-  <PageHero overline="Кухня" title="Завтраки" lead="Из того, что выращено здесь. Включены в стоимость проживания — формат выбираете накануне вечером." />
+  <PageHero
+    overline="Кухня"
+    title="Завтраки"
+    lead="Завтрак входит в стоимость проживания. Формат выбираете накануне вечером: лёгкий, фермерский или ресторанный."
+    photo={photos.grilBarRaduga}
+  />
 
   <section data-tone="ivory" class="section">
     <div class="container-site">
@@ -40,15 +47,24 @@ import { url } from "../lib/url";
 
   <section data-tone="champagne" class="section">
     <div class="container-site grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
-      <SectionHeading
-        overline="Откуда еда"
-        title="С нашей фермы"
-        lead="Куры, гуси, утки, цесарки и огород на территории. Яйца — утренние, мясо — своё, хлеб — домашний, варенье и компоты — с летнего урожая. Устрицы, мидии и креветки с «Причала 12» на Донузлаве — по предварительному заказу."
-      />
-      <div data-tone="deep" class="grain p-10 md:p-14">
-        <p class="accent-italic text-3xl leading-snug">«Это не маркетинговое „фермерское“. Просто так здесь устроена жизнь.»</p>
-        <a href={url("/degustacii/")} class="link-arrow mt-8">Ферма и дегустации <Icon name="arrow" size={16} /></a>
+      <div>
+        <SectionHeading
+          overline="Откуда еда"
+          title="С нашей фермы"
+          lead="На территории живут куры, гуси, утки и цесарки, есть огород и сад. Яйца к завтраку утренние, мясо своё, хлеб печём сами, варенье и компоты — из летнего урожая."
+        />
+        <p class="mt-7 leading-relaxed text-muted">
+          К ужину можно заказать устрицы, мидии и королевские креветки с Донузлава, вино Красного Камня и крафтовое пиво.
+          Приготовим на гриле или отдадим свежими.
+        </p>
+        <a href={url("/degustacii/")} class="link-arrow mt-8">Вино и морепродукты: цены <Icon name="arrow" size={16} /></a>
       </div>
+      <figure>
+        <div class="relative aspect-[4/5] overflow-hidden">
+          <Photo photo={photos.kuhnya} sizes="(min-width: 1024px) 560px, 100vw" class="absolute inset-0 h-full w-full object-cover" />
+        </div>
+        <figcaption class="mt-3 text-sm text-muted">Если хочется готовить самим — в апартаментах своя кухня.</figcaption>
+      </figure>
     </div>
   </section>
 </Base>

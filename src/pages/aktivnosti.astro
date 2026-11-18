@@ -6,30 +6,47 @@ import ActivityCard from "../components/ActivityCard.astro";
 import Icon from "../components/Icon.astro";
 import activities from "../data/activities.json";
 import { url } from "../lib/url";
+import Gallery from "../components/Gallery.astro";
+import { photos } from "../data/photos";
 ---
 
 <Base
   title="Активности и досуг"
-  description="Теренкур, подъём на Красный Камень, устричная ферма «Причал 12», электробайки Talaria TL2500, конные прогулки, дайвинг, светящиеся сапы, рыбалка, йога."
+  description="Чем заняться в «Лесной Обители»: подъём на Красный Камень, электробайки Talaria TL2500, устричная ферма на Донузлаве, рыбалка у Аю-Дага, конные прогулки, дайвинг, сапы, йога, футбол и волейбол."
 >
   <PageHero
     overline="Досуг"
     title="Активности"
-    lead="Лес, горы и море в получасе. Ничего обязательного — только то, что хочется. Любую активность можно добавить к заявке на бронирование."
+    lead="Горы начинаются за воротами, до моря пятнадцать минут. Выбирайте, что интересно, и отмечайте в заявке на бронирование — всё организуем."
+    photo={photos.elektrobajki}
   />
 
   <section data-tone="ivory" class="section">
     <div class="container-site">
-      <SectionHeading overline="Наши" title="Активности базы" lead="Проводим сами — с нашими гидами и на нашей технике." />
+      <SectionHeading overline="Наши" title="Активности базы" lead="Эти прогулки и поездки проводим сами, с нашими гидами и на нашей технике." />
       <div class="mt-14 grid gap-6 md:grid-cols-2">
         {activities.own.map((a) => <ActivityCard activity={a} kind="own" />)}
       </div>
     </div>
   </section>
 
+  <section data-tone="ivory" class="pb-[clamp(4.5rem,10vw,8rem)]">
+    <div class="container-site">
+      <SectionHeading overline="Спорт и море" title="Поле, площадка и море" lead="Футбольное поле с искусственным газоном и площадка для волейбола и баскетбола — прямо на территории. А на рассвете можно выйти на лодке в море и порыбачить у Аю-Дага." />
+      <Gallery
+        class="mt-14"
+        items={[
+          { photo: photos.rybalka, span: "big" },
+          { photo: photos.futbolnoePole, span: "tall" },
+          { photo: photos.ploshchadka, span: "tall" },
+        ]}
+      />
+    </div>
+  </section>
+
   <section data-tone="champagne" class="section">
     <div class="container-site">
-      <SectionHeading overline="С партнёрами" title="Дополнительно" lead="Проверенные партнёры Южного берега. Договоримся о времени и встретим у ворот." />
+      <SectionHeading overline="С партнёрами" title="Дополнительно" lead="Работаем с проверенными партнёрами на Южном берегу. Договоримся о времени и встретим у ворот." />
       <div class="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {activities.partner.map((a) => <ActivityCard activity={a} kind="partner" />)}
       </div>

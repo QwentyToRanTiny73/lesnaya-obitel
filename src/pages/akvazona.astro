@@ -9,9 +9,9 @@ import { url } from "../lib/url";
 import { formatPrice } from "../lib/price";
 
 const features = [
-  { icon: "flame", title: "Финская баня", text: "Сухой жар, берёзовые веники, тишина леса за окном. Круглый год." },
-  { icon: "waves", title: "Бассейн с подогревом", text: "Под открытым небом. Тёплая вода даже в декабре." },
-  { icon: "sofa", title: "Комната отдыха", text: "На шестерых: диваны, чай, тишина между заходами." },
+  { icon: "flame", title: "Финская баня", text: "Сухой пар и берёзовые веники, за окном лес. Топим круглый год." },
+  { icon: "waves", title: "Бассейн с подогревом", text: "Под открытым небом, вода тёплая даже в декабре." },
+  { icon: "sofa", title: "Комната отдыха", text: "Диваны и чай между заходами в парную, места на шестерых." },
 ];
 
 const range = (min: number, max: number) =>
@@ -25,7 +25,7 @@ const range = (min: number, max: number) =>
   <PageHero
     overline="Баня и бассейн"
     title="Аквазона"
-    lead="Бронируется отдельно, по часам. Работает круглый год, гостям базы — приоритет."
+    lead="Баня и бассейн бронируются отдельно, по часам. Работают круглый год, гости базы записываются в первую очередь."
   />
 
   <section data-tone="ivory" class="section">
@@ -72,7 +72,7 @@ const range = (min: number, max: number) =>
 
   <section data-tone="deep" class="section grain">
     <div class="container-site max-w-3xl text-center">
-      <p class="accent-italic text-3xl md:text-4xl">Зимой в тёплом бассейне под снегом — отдельное воспоминание.</p>
+      <p class="accent-italic text-3xl md:text-4xl">Зимой можно выйти из парной и сразу нырнуть в тёплый бассейн под открытым небом.</p>
       <div class="mt-10 flex flex-wrap justify-center gap-4">
         <a href={phoneUrl} class="btn btn-gold"><Icon name="phone" size={16} />{site.phone.display}</a>
         <a href={url("/bron/?activity=banya")} class="btn btn-outline">Добавить к проживанию</a>

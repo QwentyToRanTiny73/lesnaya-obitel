@@ -7,17 +7,20 @@ import DomikCard from "../components/DomikCard.astro";
 import ActivityCard from "../components/ActivityCard.astro";
 import Ornament from "../components/Ornament.astro";
 import Icon from "../components/Icon.astro";
+import Gallery from "../components/Gallery.astro";
+import { photos } from "../data/photos";
 import domiki from "../data/domiki.json";
 import wines from "../data/wines.json";
 import activities from "../data/activities.json";
 import { site, phoneUrl, telegramUrl, fullAddress } from "../data/site";
 import { url } from "../lib/url";
+import { formatPrice } from "../lib/price";
 
 const principles = [
-  { icon: "key", title: "Закрытая территория", text: "Посторонних нет. Только вы и те, кого вы привезли." },
-  { icon: "moon", title: "От двух ночей", text: "Нет суеты заездов на одну ночь. Вы приезжаете — и остаётесь." },
-  { icon: "grape", title: "Всё своё", text: "Вино, ферма, лес. Ничего привозного на столе." },
-  { icon: "trees", title: "Восемь гектаров леса", text: "Тишина здесь не опция, а основной продукт." },
+  { icon: "key", title: "Закрытая территория", text: "Въезд через шлагбаум, на территории только гости базы." },
+  { icon: "moon", title: "От двух ночей", text: "Хватит времени и выспаться, и съездить в горы или к морю." },
+  { icon: "grape", title: "Своё вино и ферма", text: "Вино с виноградников Красного Камня, яйца и мясо с нашей фермы." },
+  { icon: "trees", title: "8 гектаров леса", text: "Тропы, родник, пруд и поляны — гулять можно, не выходя за ворота." },
 ];
 
 const stats = [
@@ -28,12 +31,13 @@ const stats = [
 ];
 
 const wineDot: Record<string, string> = { red: "bg-[#a4473f]", rose: "bg-rose", white: "bg-gold-light" };
+const minBottle = Math.min(...wines.flatMap((w) => (w.priceBottle ? [w.priceBottle] : [])));
 
 const farm = [
   { icon: "egg", text: "Свежие яйца каждое утро" },
   { icon: "wheat", text: "Домашний хлеб и заготовки" },
   { icon: "leaf", text: "Птица и мясо с фермы" },
-  { icon: "shell", text: "Устрицы, мидии и креветки с «Причала 12»" },
+  { icon: "shell", text: "Устрицы, мидии и креветки с Донузлава" },
 ];
 
 const jsonLd = {
@@ -53,7 +57,7 @@ const jsonLd = {
   },
   checkinTime: site.checkIn,
   checkoutTime: site.checkOut,
-  amenityFeature: ["Завтрак включён", "Wi-Fi", "Финская баня", "Бассейн с подогревом", "Дегустации вина"].map((name) => ({
+  amenityFeature: ["Завтрак включён", "Wi-Fi", "Финская баня", "Бассейн с подогревом", "Дегустации вина", "Футбольное поле"].map((name) => ({
     "@type": "LocationFeatureSpecification",
     name,
     value: true,
@@ -62,7 +66,7 @@ const jsonLd = {
 ---
 
 <Base jsonLd={jsonLd}>
-  <PageHero size="full" overline="Краснокаменка · Южный берег Крыма" title="Лесная Обитель" lead={site.tagline}>
+  <PageHero size="full" overline="Краснокаменка · Южный берег Крыма" title="Лесная Обитель" lead={site.tagline} photo={photos.ayuDagPanorama}>
     <div class="mt-10 flex flex-wrap gap-4">
       <a href={url("/bron/")} class="btn btn-gold">Забронировать</a>
       <a href={url("/domiki/")} class="btn btn-outline">Домики и цены</a>
@@ -83,9 +87,9 @@ const jsonLd = {
   <section data-tone="ivory" class="section">
     <div class="container-site grid gap-16 lg:grid-cols-[1fr_1fr] lg:gap-24">
       <SectionHeading
-        overline="Частное пространство"
-        title="Не база отдыха — дом в лесу"
-        lead="Мы не собираем толпы и не продаём развлечения. У скалы Красный Камень — восемь гектаров леса, пруд, родник и горы. Своё вино, своя ферма, своя тишина. Сюда приезжают за глубиной."
+        overline="О месте"
+        title="Дом в лесу над Гурзуфом"
+        lead="Восемь гектаров леса у скалы Красный Камень, до моря — пятнадцать минут на машине. На территории домики среди деревьев, сад и огород, футбольное поле, площадка для волейбола и баскетбола, гриль-бар. С верхней поляны видно Аю-Даг и море. К нам приезжают семьями и компаниями: выспаться, погулять по горам и поесть то, что выросло рядом."
       />
       <ul class="grid gap-px self-center border border-line bg-line sm:grid-cols-2">
         {
@@ -129,7 +133,7 @@ const jsonLd = {
   <section data-tone="champagne" class="section">
     <div class="container-site">
       <div class="flex flex-wrap items-end justify-between gap-8">
-        <SectionHeading overline="Размещение" title="Четырнадцать домиков. Одна территория." />
+        <SectionHeading overline="Размещение" title="Домики и апартаменты" lead="Четырнадцать домиков и апартаменты. Завтрак включён во все тарифы." />
         <a href={url("/domiki/")} class="link-arrow">Все варианты <Icon name="arrow" size={16} /></a>
       </div>
       <div class="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -138,16 +142,40 @@ const jsonLd = {
     </div>
   </section>
 
+  <!-- Территория -->
+  <section data-tone="ivory" class="section">
+    <div class="container-site">
+      <SectionHeading
+        overline="Территория"
+        title="Что вас ждёт на месте"
+        lead="Лес, спортплощадки, гриль-бар и виды на Аю-Даг. Всё это в пределах базы."
+      />
+      <Gallery
+        class="mt-14"
+        items={[
+          { photo: photos.ayuDagTuman, span: "big" },
+          { photo: photos.futbolnoePole, span: "tall" },
+          { photo: photos.ploshchadka, span: "tall" },
+          { photo: photos.grilBarRaduga, span: "wide" },
+          { photo: photos.territoriyaSverhu, span: "wide" },
+        ]}
+      />
+    </div>
+  </section>
+
   <!-- Вино -->
   <section data-tone="deep" class="section grain">
     <div class="container-site grid gap-16 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24">
       <div>
         <SectionHeading
-          overline="Винодельня"
-          title="От лозы до бокала"
-          lead="Виноградники у скалы Красный Камень. Лоза, давильня, бочка, бутылка — всё на нашей территории. Урожай, который дозревает, а не торопится."
+          overline="Вино"
+          title="Вино Красного Камня"
+          lead="Урожай 2025 года: Кокур, Мускат и Розе — сухие вина малой серии, виноград собран вручную. Их можно попробовать на дегустации или взять бутылку к ужину."
         />
-        <a href={url("/degustacii/")} class="btn btn-gold mt-10">Дегустации</a>
+        <div class="mt-10 flex flex-wrap items-center gap-6">
+          <a href={url("/degustacii/")} class="btn btn-gold">Вино и устрицы</a>
+          <span class="text-sm text-muted">бутылка от {formatPrice(minBottle)}</span>
+        </div>
       </div>
       <ol class="border-t border-line">
         {
@@ -159,7 +187,7 @@ const jsonLd = {
                   <span class:list={["size-2 rounded-full", wineDot[w.type]]} aria-hidden="true" />
                   <span class="accent-italic text-[1.75rem] leading-none">{w.name}</span>
                 </p>
-                <p class="mt-2 text-[0.9375rem] text-muted">{w.profile}</p>
+                <p class="mt-2 text-[0.9375rem] text-muted">{w.style}{w.vintage ? `, ${w.vintage}` : ""} · {w.profile}</p>
               </div>
             </li>
           ))
@@ -173,9 +201,9 @@ const jsonLd = {
     <div class="container-site">
       <div class="flex flex-wrap items-end justify-between gap-8">
         <SectionHeading
-          overline="Впечатления"
-          title="Горы, море и всё, что между"
-          lead="Ничего обязательного — только то, что хочется. Остальное — на странице активностей."
+          overline="Чем заняться"
+          title="Горы, море и прогулки"
+          lead="Подняться на Красный Камень, проехать на электробайке до яйлы, выйти на рыбалку на рассвете. Любое занятие можно отметить в заявке на бронирование."
         />
         <a href={url("/aktivnosti/")} class="link-arrow">Все активности <Icon name="arrow" size={16} /></a>
       </div>
@@ -191,8 +219,8 @@ const jsonLd = {
       <div>
         <SectionHeading
           overline="Ферма"
-          title="Всё на столе выращено здесь"
-          lead="Куры, гуси, утки, цесарки, свиньи и огород. Яйца утром приносят к завтраку, мясо готовят из своего. Морепродукты — с нашей фермы на Донузлаве."
+          title="Еда с нашей фермы"
+          lead="Куры, гуси, утки, цесарки, свиньи и огород. Утром к завтраку — свежие яйца, мясо готовим своё. Устрицы, мидии и креветки привозим с Донузлава под заказ."
         />
         <ul class="mt-10 grid gap-4 sm:grid-cols-2">
           {farm.map((f) => <li class="flex items-start gap-4"><Icon name={f.icon} size={24} class="mt-0.5 shrink-0 text-accent" /><span>{f.text}</span></li>)}
@@ -203,7 +231,7 @@ const jsonLd = {
         <div>
           <p class="overline">Аквазона</p>
           <h3 class="h2 mt-5">Баня и бассейн круглый год</h3>
-          <p class="lead mt-6">Финская баня, бассейн с подогревом и комната отдыха на шестерых. Зимой — пар и тёплая вода под открытым небом.</p>
+          <p class="lead mt-6">Финская баня, бассейн с подогревом под открытым небом и комната отдыха на шестерых. Работает круглый год, зимой тоже.</p>
         </div>
         <div class="mt-10 flex flex-wrap items-center gap-6">
           <a href={url("/akvazona/")} class="btn btn-outline">Тарифы</a>
@@ -216,8 +244,8 @@ const jsonLd = {
   <!-- Финал -->
   <section data-tone="ivory" class="section">
     <div class="container-site max-w-3xl text-center">
-      <p class="accent-italic text-3xl text-muted md:text-4xl">Восемь гектаров леса ждут.</p>
-      <h2 class="h2 mt-4">Приехать и остаться</h2>
+      <p class="accent-italic text-3xl text-muted md:text-4xl">Заезд с {site.checkIn}, от двух ночей</p>
+      <h2 class="h2 mt-4">Ждём в гости</h2>
       <Ornament class="mt-8 justify-center" />
       <div class="mt-10 flex flex-wrap justify-center gap-4">
         <a href={url("/bron/")} class="btn btn-dark">Забронировать</a>

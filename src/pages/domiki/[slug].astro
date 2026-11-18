@@ -7,6 +7,7 @@ import Icon from "../../components/Icon.astro";
 import Ornament from "../../components/Ornament.astro";
 import domiki from "../../data/domiki.json";
 import { site } from "../../data/site";
+import { domikPhotos } from "../../data/photos";
 import { url } from "../../lib/url";
 import { formatPrice, seasonLabels, seasonMonths, type Season } from "../../lib/price";
 
@@ -36,7 +37,7 @@ const others = domiki.map((o, i) => ({ o, i })).filter(({ o }) => o.id !== d.id)
 
       <div class="grid gap-14 lg:grid-cols-[1.25fr_1fr] lg:gap-20">
         <div>
-          <ArtTile icon={icons[index]} tone={tones[index]} seed={index + 3} ratio="16 / 10" />
+          <ArtTile icon={icons[index]} tone={tones[index]} seed={index + 3} ratio="16 / 10" photo={domikPhotos[d.id]} sizes="(min-width: 1024px) 680px, 100vw" />
           <p class="mt-10 text-lg leading-relaxed">{d.description}</p>
           <h2 class="h3 mt-12">Удобства</h2>
           <ul class="mt-6 grid gap-px border border-line bg-line sm:grid-cols-2">
