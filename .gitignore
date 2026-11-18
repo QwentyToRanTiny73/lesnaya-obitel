@@ -14,5 +14,6 @@ public/prays.pdf
 .env*
 *.tsbuildinfo
 
-# локальные настройки Claude Code
-.claude/
+# локальные настройки Claude Code; агенты проекта (.claude/agents/) — в git
+.claude/*
+!.claude/agents/
