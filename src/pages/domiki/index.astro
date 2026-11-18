@@ -5,8 +5,11 @@ import ArtTile from "../../components/ArtTile.astro";
 import Icon from "../../components/Icon.astro";
 import domiki from "../../data/domiki.json";
 import { site } from "../../data/site";
+import { domikPhotos, photos } from "../../data/photos";
+import Gallery from "../../components/Gallery.astro";
+import SectionHeading from "../../components/SectionHeading.astro";
 import { url } from "../../lib/url";
-import { formatPrice, seasonLabels, seasonMonths, type Season } from "../../lib/price";
+import { formatPrice, holidayNote, perPerson, seasonLabels, seasonMonths, type Season } from "../../lib/price";
 
 const seasons: Season[] = ["offseason", "season", "peak"];
 const tones = ["deep", "redstone", "moss", "claret"] as const;
@@ -14,13 +17,15 @@ const icons = ["bath", "house", "trees", "key"];
 ---
 
 <Base
+  ogPhoto={photos.gamak}
   title="Домики и апартаменты"
   description="Четырнадцать домиков и апартаменты на восьми гектарах леса у Красного Камня. Апартаменты с джакузи, домики на 4 и на 6–8 гостей, аренда всей базы. Завтрак включён."
 >
   <PageHero
     overline="Размещение"
     title="Домики и апартаменты"
-    lead="Четырнадцать домиков и апартаменты на восьми гектарах. Каждый — с видом на лес или горы, на расстоянии от соседей. Завтрак включён во все тарифы."
+    lead="Четырнадцать домиков и апартаменты на восьми гектарах леса. Домики стоят на расстоянии друг от друга, из окон — лес или горы. Завтрак включён во все тарифы."
+    photo={photos.gamak}
   />
 
   <section data-tone="ivory" class="section">
@@ -28,7 +33,7 @@ const icons = ["bath", "house", "trees", "key"];
       {
         domiki.map((d, i) => (
           <article class:list={["grid items-center gap-10 lg:grid-cols-2 lg:gap-20", i % 2 === 1 && "lg:[&>*:first-child]:order-2"]}>
-            <ArtTile icon={icons[i]} tone={tones[i]} seed={i + 3} ratio="5 / 4" />
+            <ArtTile icon={icons[i]} tone={tones[i]} seed={i + 3} ratio="5 / 4" photo={domikPhotos[d.id]} sizes="(min-width: 1024px) 560px, 100vw" />
             <div>
               <p class="overline">{d.highlight}</p>
               <h2 class="h2 mt-4">{d.title}</h2>
@@ -49,7 +54,10 @@ const icons = ["bath", "house", "trees", "key"];
                       <th scope="row">
                         {seasonLabels[s]} <span class="sub">{seasonMonths[s]}</span>
                       </th>
-                      <td class="num">{d.pricePrefix ? `${d.pricePrefix} ` : ""}{formatPrice(d.prices[s]!)}</td>
+                      <td class="num">
+                        {d.pricePrefix ? `${d.pricePrefix} ` : ""}{formatPrice(d.prices[s]!)}
+                        <span class="block font-sans text-xs text-muted">≈ {formatPrice(perPerson(d.prices[s]!, d.capacity))} с человека</span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -58,7 +66,7 @@ const icons = ["bath", "house", "trees", "key"];
 
               <div class="mt-8 flex flex-wrap gap-4">
                 <a href={url(`/bron/?type=${d.id}`)} class="btn btn-dark">Забронировать</a>
-                <a href={url(`/domiki/${d.slug}/`)} class="btn btn-outline">Подробнее</a>
+                <a href={url(d.id === "vsya-baza" ? "/gruppam/" : `/domiki/${d.slug}/`)} class="btn btn-outline">Подробнее</a>
               </div>
             </div>
           </article>
@@ -67,10 +75,25 @@ const icons = ["bath", "house", "trees", "key"];
     </div>
   </section>
 
-  <section data-tone="champagne" class="py-16">
+  <section data-tone="champagne" class="section">
+    <div class="container-site">
+      <SectionHeading overline="Интерьеры" title="Как внутри" lead="Несколько снимков изнутри: спальня, кухня, прихожая с душевой и туалетом." />
+      <Gallery
+        class="mt-14"
+        items={[
+          { photo: photos.spalnya, span: "tall" },
+          { photo: photos.kuhnya, span: "tall" },
+          { photo: photos.prihozhaya, span: "big" },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section data-tone="ivory" class="py-16">
     <div class="container-site flex flex-col items-center gap-3 text-center">
       <p class="accent-italic text-3xl">Минимальный срок проживания — {site.minNights} ночи.</p>
-      <p class="text-muted">Заезд с {site.checkIn}, выезд до {site.checkOut}. Ранний заезд и поздний выезд — по договорённости.</p>
+      <p class="text-muted">Заезд с {site.checkIn}, выезд до {site.checkOut}. Ранний заезд и поздний выезд обсудим при бронировании.</p>
+      <p class="text-sm text-muted">Цена с человека — при полной загрузке домика. {holidayNote[0].toUpperCase() + holidayNote.slice(1)} — по цене сезона.</p>
     </div>
   </section>
 </Base>

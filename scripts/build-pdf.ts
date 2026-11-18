@@ -13,8 +13,9 @@ import domiki from "../src/data/domiki.json";
 import prices from "../src/data/prices.json";
 import activities from "../src/data/activities.json";
 import breakfasts from "../src/data/breakfasts.json";
+import wines from "../src/data/wines.json";
 import { site, fullAddress } from "../src/data/site";
-import { formatPrice, seasonLabels, seasonMonths, type Season } from "../src/lib/price";
+import { formatPrice, holidayNote, seasonLabels, seasonMonths, type Season } from "../src/lib/price";
 
 const root = join(import.meta.dir, "..");
 const fontDir = (pkg: string) => join(root, "node_modules/@fontsource", pkg, "files");
@@ -212,7 +213,7 @@ const range = (min: number, max: number | null) =>
 header(true);
 
 const seasons: Season[] = ["offseason", "season", "peak"];
-section("Проживание, за сутки", "Завтрак включён. Минимум 2 ночи, аренда всей базы — от 3 ночей.");
+section("Проживание, за сутки", `Завтрак включён. Минимум 2 ночи, аренда всей базы — от 3 ночей. ${holidayNote[0].toUpperCase() + holidayNote.slice(1)} — по цене сезона.`);
 colHeads(seasons.map((s) => `${seasonLabels[s]}`));
 for (const d of domiki) {
   row(
@@ -231,9 +232,21 @@ section("Аквазона", "Финская баня, бассейн с подо
 for (const t of prices.aquazone) row(t.tariff, t.time, [`${range(t.priceMin, t.priceMax)} ${t.unit.replace("₽", "").trim()}`.trim()], 150);
 y += 14;
 
-section("Дегустации", "18+. Чрезмерное употребление алкоголя вредит вашему здоровью.");
+section("Дегустации и ужины", "18+. Чрезмерное употребление алкоголя вредит вашему здоровью.");
 for (const d of prices.degustations)
   row(d.format, d.composition, [`${d.priceMax === null ? "от " : ""}${range(d.priceMin, d.priceMax)} ${d.unit.replace("₽", "").trim()}`], 150);
+y += 14;
+
+ensure(230); // таблица вин целиком на одной странице
+section("Вино урожая 2025", "Сухие вина Красного Камня. Бокал 150 мл / бутылка 0,75 л. 18+.");
+colHeads(["Бокал", "Бутылка"]);
+for (const w of wines.filter((x) => x.priceBottle !== null)) {
+  row(w.name, `${w.style.toLowerCase()}, ${w.profile.toLowerCase()}`, [w.priceGlass ? formatPrice(w.priceGlass) : "—", formatPrice(w.priceBottle!)]);
+}
+y += 14;
+
+section("Морепродукты и пиво", "Устрицы, мидии и креветки с Донузлава — под заказ, лучше при бронировании.");
+for (const s of [...prices.seafood, ...prices.beer]) row(s.item, s.detail, [`${formatPrice(s.price)} ${s.unit.replace("₽", "").trim()}`], 150);
 y += 14;
 
 section("Активности");

@@ -1,0 +1,44 @@
+---
+// Отзывы гостей из src/data/reviews.json. Пока список пуст, блок не выводится.
+// Формат записи: { "name": "Анна", "date": "2026-07", "source": "Авито", "text": "…" }
+// Берите только настоящие отзывы и с согласия автора (имя без фамилии).
+import reviews from "../data/reviews.json";
+import SectionHeading from "./SectionHeading.astro";
+import { site } from "../data/site";
+
+interface Review {
+  name: string;
+  date: string;
+  source: string;
+  text: string;
+}
+const list = reviews as Review[];
+const month = (ym: string) => {
+  const [y, m] = ym.split("-").map(Number);
+  return new Date(y, m - 1, 1).toLocaleDateString("ru-RU", { month: "long", year: "numeric" });
+};
+---
+
+{
+  list.length > 0 && (
+    <section data-tone="champagne" class="section">
+      <div class="container-site">
+        <SectionHeading overline="Отзывы" title="Что пишут гости" />
+        <ul class="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {list.map((r) => (
+            <li class="flex flex-col border border-line bg-raised p-8">
+              <p class="leading-relaxed">«{r.text}»</p>
+              <p class="mt-auto pt-6 text-sm text-muted">
+                {r.name} · {month(r.date)} · {r.source}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-8 text-sm text-muted">
+          Ещё отзывы — в объявлении на{" "}
+          <a href={site.listings.avito} target="_blank" rel="noopener" class="text-accent underline underline-offset-4">Авито</a>.
+        </p>
+      </div>
+    </section>
+  )
+}

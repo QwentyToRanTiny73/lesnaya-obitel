@@ -2,20 +2,40 @@
 import Base from "../layouts/Base.astro";
 import PageHero from "../components/PageHero.astro";
 import Icon from "../components/Icon.astro";
+import SectionHeading from "../components/SectionHeading.astro";
 import domiki from "../data/domiki.json";
 import { bookingActivities } from "../data/bookingOptions";
 import { site, phoneUrl, telegramUrl } from "../data/site";
 import { url } from "../lib/url";
+import { holidayNote } from "../lib/price";
+
+const faq: { q: string; a: string; link?: { href: string; label: string } }[] = [
+  { q: "Сколько ночей минимум?", a: `${site.minNights} ночи. Всю базу целиком — от 3 ночей.` },
+  { q: "Во сколько заезд и выезд?", a: `Заезд с ${site.checkIn}, выезд до ${site.checkOut}. Ранний заезд и поздний выезд обсудим, если домик свободен.` },
+  { q: "Что входит в стоимость?", a: "Проживание, завтрак, Wi-Fi и Smart TV. Баня и бассейн, активности, дегустации и морепродукты оплачиваются отдельно." },
+  { q: "Как считается цена?", a: `Каждая ночь — по своему сезону: несезон октябрь — май, сезон июнь и сентябрь, пик июль — август. ${holidayNote[0].toUpperCase() + holidayNote.slice(1)} — по цене сезона.` },
+  { q: "Как проходит бронирование?", a: "Отправляете заявку в Telegram или Max, мы проверяем даты и подтверждаем бронь в переписке. Оплачивать на сайте ничего не нужно." },
+  { q: "Как добраться без машины?", a: "Встретим в аэропорту Симферополя или в Ялте — трансфер обсудим при бронировании." },
+  { q: "Можно заказать устрицы и вино к приезду?", a: "Да. Отметьте «Морепродукты к заезду» в заявке — привезём с Донузлава к вашему заезду.", link: { href: "/degustacii/", label: "Цены на вино и морепродукты" } },
+  { q: "Можно снять всю базу для группы?", a: "Да, до 80 гостей, от 3 ночей: ретриты, корпоративы, сборы, свадьбы.", link: { href: "/gruppam/", label: "Группам и командам" } },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+};
 ---
 
 <Base
+  jsonLd={jsonLd}
   title="Бронирование"
   description="Заявка на бронирование домика в «Лесной Обители». Расчёт стоимости по сезонам, от двух ночей, завтрак включён."
 >
   <PageHero
     overline="Бронирование"
     title="Заявка на проживание"
-    lead="Заполните форму — посчитаем стоимость сразу, а заявку вы отправите нам в Telegram в один клик. Это не оплата: подтвердим бронь в переписке."
+    lead="Заполните форму: стоимость посчитается сразу, а заявку вы отправите нам в Telegram в один клик. Оплачивать сейчас ничего не нужно, бронь подтвердим в переписке."
   />
 
   <section data-tone="ivory" class="section">
@@ -131,7 +151,7 @@ import { url } from "../lib/url";
           <h2 id="result-title" class="h2 mt-4">Отправьте заявку нам</h2>
           <p class="lead mt-6">
             Нажмите кнопку — текст скопируется, а чат откроется. Вставьте сообщение и отправьте.
-            Ответим в течение часа в дневное время.
+            Днём ответим в течение часа.
           </p>
           <div class="mt-10 grid gap-3 sm:flex sm:flex-wrap">
             <a id="send-telegram" href={telegramUrl} target="_blank" rel="noopener" class="btn btn-gold"><Icon name="send" size={16} />Скопировать и открыть Telegram</a>
@@ -146,6 +166,33 @@ import { url } from "../lib/url";
           <label for="message" class="field-label">Текст заявки</label>
           <textarea id="message" readonly rows="12" class="field font-sans text-[0.9375rem] leading-relaxed"></textarea>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-tone="champagne" class="section">
+    <div class="container-site grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+      <SectionHeading overline="Вопросы" title="Частые вопросы" lead="Не нашли ответ — напишите в Telegram или позвоните, ответим." />
+      <div class="border-t border-line">
+        {
+          faq.map((f) => (
+            <details class="group border-b border-line">
+              <summary class="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-4 font-display text-lg [&::-webkit-details-marker]:hidden">
+                {f.q}
+                <span aria-hidden="true" class="shrink-0 text-accent transition-transform duration-300 group-open:rotate-45">+</span>
+              </summary>
+              <p class="pb-6 leading-relaxed text-muted">
+                {f.a}
+                {f.link && (
+                  <>
+                    {" "}
+                    <a href={url(f.link.href)} class="text-accent underline underline-offset-4">{f.link.label}</a>
+                  </>
+                )}
+              </p>
+            </details>
+          ))
+        }
       </div>
     </div>
   </section>

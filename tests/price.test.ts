@@ -7,6 +7,7 @@ import {
   getSeason,
   minNightsFor,
   parseDate,
+  perPerson,
   pluralNights,
 } from "../src/lib/price";
 
@@ -24,6 +25,32 @@ describe("сезоны", () => {
   it("октябрь — май — несезон", () => {
     expect(getSeason(d("2026-10-01"))).toBe("offseason");
     expect(getSeason(d("2026-05-31"))).toBe("offseason");
+  });
+});
+
+describe("праздники — по цене сезона", () => {
+  it("майские 1–11 мая — сезон, 12 мая — снова несезон", () => {
+    expect(getSeason(d("2027-05-01"))).toBe("season");
+    expect(getSeason(d("2027-05-11"))).toBe("season");
+    expect(getSeason(d("2027-05-12"))).toBe("offseason");
+  });
+  it("новогодние через смену года: 30 декабря — 8 января", () => {
+    expect(getSeason(d("2026-12-29"))).toBe("offseason");
+    expect(getSeason(d("2026-12-31"))).toBe("season");
+    expect(getSeason(d("2027-01-08"))).toBe("season");
+    expect(getSeason(d("2027-01-09"))).toBe("offseason");
+  });
+  it("итог: ночь 29 декабря по несезону, 30 декабря — по сезону", () => {
+    // домик на 6–8: несезон 15 000 + сезон 17 000
+    expect(calculateTotal("domik-6-8", d("2026-12-29"), d("2026-12-31"))).toBe(32000);
+  });
+});
+
+describe("цена с человека", () => {
+  it("делится на вместимость и округляется вверх до десятков", () => {
+    expect(perPerson(15000, 8)).toBe(1880);
+    expect(perPerson(11000, 4)).toBe(2750);
+    expect(perPerson(150000, 80)).toBe(1880);
   });
 });
 

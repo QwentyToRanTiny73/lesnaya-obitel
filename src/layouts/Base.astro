@@ -9,6 +9,8 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { site } from "../data/site";
 import { url } from "../lib/url";
+import { getImage } from "astro:assets";
+import { photos, type SitePhoto } from "../data/photos";
 
 interface Props {
   /** Название страницы; на главной не передаётся. */
@@ -16,13 +18,18 @@ interface Props {
   description?: string;
   jsonLd?: Record<string, unknown>;
   noindex?: boolean;
+  /** Фото для превью ссылки в мессенджерах и соцсетях; по умолчанию — панорама с Аю-Дагом */
+  ogPhoto?: SitePhoto;
 }
-const { title, description = site.description, jsonLd, noindex = false } = Astro.props;
+const { title, description = site.description, jsonLd, noindex = false, ogPhoto = photos.ayuDagPanorama } = Astro.props;
 
 const fullTitle = title
   ? `${title} — ${site.name} · База отдыха у Красного Камня, Крым`
   : `${site.name} — частная эко-база у скалы Красный Камень, Крым`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// Превью 1200×630 — формат, который Telegram, ВКонтакте и WhatsApp показывают крупной карточкой
+const og = await getImage({ src: ogPhoto.src, width: 1200, height: 630, fit: "cover", format: "jpg", quality: 80 });
+const ogImage = new URL(og.src, Astro.site).href;
 ---
 
 <!doctype html>
@@ -45,8 +52,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogPhoto.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
 
-    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify({ image: ogImage, ...jsonLd })} />}
   </head>
   <body>
     <a

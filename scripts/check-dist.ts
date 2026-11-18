@@ -20,12 +20,13 @@ const forbidden: [RegExp, string][] = [
   [/info@lesnaya-obitel\.ru/i, "почта на несуществующем домене"],
   [/(?<!\d)7\s?га(?![а-яё])|семи гектар|15 домик|пятнадцать домик/i, "устаревшие цифры (сейчас 8 га, 14 домиков)"],
   [/день\s*—\s*2\s?500/i, "Talaria 2500 — это модель, а не цена"],
+  [/закуп|оптов|себестоим|наценк|аквакультур/i, "закупочные цены и поставщик не публикуются"],
 ];
 
 const required = [
   "index.html", "404.html", "prays.pdf", "sitemap-index.xml", "favicon.svg",
   "domiki/index.html", "aktivnosti/index.html", "degustacii/index.html", "akvazona/index.html",
-  "pitanie/index.html", "prays/index.html", "kontakty/index.html", "bron/index.html",
+  "pitanie/index.html", "prays/index.html", "kontakty/index.html", "bron/index.html", "gruppam/index.html",
   "politika-konfidencialnosti/index.html", "soglasie/index.html",
 ];
 
