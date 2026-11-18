@@ -15,7 +15,7 @@ import activities from "../src/data/activities.json";
 import breakfasts from "../src/data/breakfasts.json";
 import wines from "../src/data/wines.json";
 import { site, fullAddress } from "../src/data/site";
-import { formatPrice, seasonLabels, seasonMonths, type Season } from "../src/lib/price";
+import { formatPrice, holidayNote, seasonLabels, seasonMonths, type Season } from "../src/lib/price";
 
 const root = join(import.meta.dir, "..");
 const fontDir = (pkg: string) => join(root, "node_modules/@fontsource", pkg, "files");
@@ -213,7 +213,7 @@ const range = (min: number, max: number | null) =>
 header(true);
 
 const seasons: Season[] = ["offseason", "season", "peak"];
-section("Проживание, за сутки", "Завтрак включён. Минимум 2 ночи, аренда всей базы — от 3 ночей.");
+section("Проживание, за сутки", `Завтрак включён. Минимум 2 ночи, аренда всей базы — от 3 ночей. ${holidayNote[0].toUpperCase() + holidayNote.slice(1)} — по цене сезона.`);
 colHeads(seasons.map((s) => `${seasonLabels[s]}`));
 for (const d of domiki) {
   row(

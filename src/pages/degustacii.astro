@@ -11,7 +11,6 @@ import { telegramUrl } from "../data/site";
 import { url } from "../lib/url";
 import { formatPrice } from "../lib/price";
 
-const typeLabel: Record<string, string> = { red: "Красное", rose: "Розовое", white: "Белое" };
 const typeDot: Record<string, string> = { red: "bg-[#a4473f]", rose: "bg-rose", white: "bg-gold-light" };
 
 const range = (min: number, max: number | null) =>
@@ -28,6 +27,7 @@ const farm = [
 ---
 
 <Base
+  ogPhoto={photos.rybalka}
   title="Вино и морепродукты"
   description="Сухие вина Красного Камня урожая 2025: Кокур, Мускат, Розе — от 3 500 ₽ за бутылку. Устрицы с Донузлава от 420 ₽ за штуку, мидии, королевские креветки, крафтовое пиво. Дегустации и ферма."
 >

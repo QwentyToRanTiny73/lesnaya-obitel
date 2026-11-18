@@ -26,7 +26,7 @@ const forbidden: [RegExp, string][] = [
 const required = [
   "index.html", "404.html", "prays.pdf", "sitemap-index.xml", "favicon.svg",
   "domiki/index.html", "aktivnosti/index.html", "degustacii/index.html", "akvazona/index.html",
-  "pitanie/index.html", "prays/index.html", "kontakty/index.html", "bron/index.html",
+  "pitanie/index.html", "prays/index.html", "kontakty/index.html", "bron/index.html", "gruppam/index.html",
   "politika-konfidencialnosti/index.html", "soglasie/index.html",
 ];
 

@@ -1,0 +1,202 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import Gallery from "../components/Gallery.astro";
+import Icon from "../components/Icon.astro";
+import domiki from "../data/domiki.json";
+import { photos } from "../data/photos";
+import { site, phoneUrl, telegramUrl } from "../data/site";
+import { url } from "../lib/url";
+import { formatPrice, perPerson, seasonLabels, seasonMonths, type Season } from "../lib/price";
+
+const base = domiki.find((d) => d.id === "vsya-baza")!;
+const big = domiki.find((d) => d.id === "domik-6-8")!;
+const seasons: Season[] = ["offseason", "season", "peak"];
+
+const facts = [
+  { value: `до ${base.capacity}`, label: "гостей одновременно" },
+  { value: "14 + 1", label: "домиков и апартаменты" },
+  { value: "8 га", label: "закрытой территории" },
+  { value: `от ${base.minNights}`, label: "ночей" },
+];
+
+const formats = [
+  {
+    icon: "lotus",
+    title: "Ретрит",
+    text: "Йога, психологические группы, коучинговые и творческие программы. Практики на поляне или в беседке у пруда, баня и бассейн вечером, никого постороннего на территории.",
+  },
+  {
+    icon: "key",
+    title: "Корпоратив и стратегическая сессия",
+    text: "Выездная сессия команды или праздник для коллектива. Днём работа, вечером гриль-бар, дегустация вина и баня. Организацию ведёт менеджер мероприятия.",
+  },
+  {
+    icon: "flag",
+    title: "Спортивные сборы",
+    text: "Футбольное поле с искусственным газоном и площадка для волейбола и баскетбола на территории. Для восстановления — финская баня и бассейн с подогревом круглый год.",
+  },
+  {
+    icon: "gift",
+    title: "Свадьба и семейный праздник",
+    text: "Все гости живут рядом, на одной закрытой территории. Праздник на лужайке у гриль-бара, вино Красного Камня и устрицы с Донузлава к столу.",
+  },
+];
+
+const included = [
+  "Все 14 домиков и апартаменты",
+  "Завтрак для всех гостей",
+  "Аквазона: финская баня и бассейн с подогревом",
+  "Футбольное поле, площадка, гриль-бар, беседки",
+  "Менеджер мероприятия",
+];
+const discuss = [
+  "Обеды и ужины, банкет",
+  "Трансфер из аэропорта Симферополя или Ялты",
+  "Программа: дегустации, экскурсии, электробайки, конные прогулки",
+  "Устрицы, мидии и вино к столу",
+];
+---
+
+<Base
+  title="Группам и командам"
+  description={`Аренда всей базы «Лесная Обитель» для ретритов, корпоративов, спортивных сборов и свадеб: до ${base.capacity} гостей, 8 га закрытой территории у Красного Камня, от ${formatPrice(perPerson(base.prices.offseason, base.capacity))} с человека в сутки с завтраком.`}
+  ogPhoto={photos.ayuDagTuman}
+>
+  <PageHero
+    overline="Аренда всей базы"
+    title="Группам и командам"
+    lead={`Вся территория только для вашей группы: до ${base.capacity} гостей, баня и бассейн, футбольное поле, гриль-бар. От ${formatPrice(perPerson(base.prices.offseason, base.capacity))} с человека в сутки с завтраком.`}
+    photo={photos.ayuDagTuman}
+  >
+    <div class="mt-10 flex flex-wrap gap-4">
+      <a href={url(`/bron/?type=${base.id}`)} class="btn btn-gold">Запросить даты</a>
+      <a href={telegramUrl} target="_blank" rel="noopener" class="btn btn-outline"><Icon name="send" size={16} />Обсудить в Telegram</a>
+    </div>
+  </PageHero>
+
+  <!-- Цифры -->
+  <section data-tone="ivory" class="pt-20">
+    <div class="container-site">
+      <dl class="grid grid-cols-2 border-y border-line md:grid-cols-4">
+        {
+          facts.map((f, i) => (
+            <div
+              class:list={[
+                "border-line px-4 py-10 text-center",
+                i % 2 === 1 && "border-l",
+                i >= 2 && "border-t md:border-t-0",
+                i === 2 && "md:border-l",
+              ]}
+            >
+              <dt class="sr-only">{f.label}</dt>
+              <dd class="font-display text-5xl">{f.value}</dd>
+              <dd class="mt-3 text-sm text-muted">{f.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- Форматы -->
+  <section data-tone="ivory" class="section">
+    <div class="container-site">
+      <SectionHeading overline="Форматы" title="Под какие поездки подходит" />
+      <div class="mt-14 grid gap-6 md:grid-cols-2">
+        {
+          formats.map((f) => (
+            <article class="border border-line bg-raised p-8 md:p-10">
+              <Icon name={f.icon} size={30} class="text-accent" />
+              <h3 class="h3 mt-6">{f.title}</h3>
+              <p class="mt-3 leading-relaxed text-muted">{f.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Цены -->
+  <section data-tone="champagne" class="section">
+    <div class="container-site grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+      <SectionHeading
+        overline="Стоимость"
+        title="Цена за сутки"
+        lead={`Минимальный срок — ${base.minNights} ночи. Цена с человека — при полной загрузке, ${base.capacity} гостей.`}
+      />
+      <div class="grid gap-10">
+        <table class="price-table">
+          <caption class="sr-only">Аренда всей базы по сезонам</caption>
+          <tbody>
+            {
+              seasons.map((s) => (
+                <tr>
+                  <th scope="row">
+                    {seasonLabels[s]}
+                    <span class="sub">{seasonMonths[s]}</span>
+                  </th>
+                  <td class="num text-2xl">
+                    от {formatPrice(base.prices[s]!)}
+                    <span class="block font-sans text-xs text-muted">≈ {formatPrice(perPerson(base.prices[s]!, base.capacity))} с человека</span>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+
+        <div class="grid gap-10 sm:grid-cols-2">
+          <div>
+            <p class="overline">Входит в стоимость</p>
+            <ul class="mt-5 grid gap-3 text-[0.9375rem]">
+              {included.map((i) => <li class="flex gap-3"><Icon name="check" size={18} class="mt-0.5 shrink-0 text-accent" />{i}</li>)}
+            </ul>
+          </div>
+          <div>
+            <p class="overline">Обсудим отдельно</p>
+            <ul class="mt-5 grid gap-3 text-[0.9375rem] text-muted">
+              {discuss.map((i) => <li class="flex gap-3"><Icon name="arrow" size={18} class="mt-0.5 shrink-0 text-accent" />{i}</li>)}
+            </ul>
+          </div>
+        </div>
+
+        <p class="border-l border-accent pl-6 text-[0.9375rem] leading-relaxed text-muted">
+          Группа меньше? Можно снять несколько домиков: у нас {big.count} домиков на {big.capacity} гостей, от{" "}
+          {formatPrice(big.prices.offseason)} за домик в сутки — это ≈ {formatPrice(perPerson(big.prices.offseason, big.capacity))} с человека.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Фото -->
+  <section data-tone="ivory" class="section">
+    <div class="container-site">
+      <SectionHeading overline="Территория" title="Где будет ваша группа" />
+      <Gallery
+        class="mt-14"
+        items={[
+          { photo: photos.territoriyaSverhu, span: "big" },
+          { photo: photos.futbolnoePole, span: "tall" },
+          { photo: photos.ploshchadka, span: "tall" },
+          { photo: photos.grilBarRaduga, span: "wide" },
+          { photo: photos.gamak, span: "wide" },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section data-tone="deep" class="section grain">
+    <div class="container-site max-w-3xl text-center">
+      <h2 class="h2">Расскажите о группе</h2>
+      <p class="lead mx-auto mt-6">
+        Даты, сколько человек и что планируете. Пришлём расчёт и варианты программы.
+      </p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href={url(`/bron/?type=${base.id}`)} class="btn btn-gold">Заполнить заявку</a>
+        <a href={phoneUrl} class="btn btn-outline"><Icon name="phone" size={16} />{site.phone.display}</a>
+      </div>
+    </div>
+  </section>
+</Base>

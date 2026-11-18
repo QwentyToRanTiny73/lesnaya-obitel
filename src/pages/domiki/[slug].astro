@@ -9,7 +9,7 @@ import domiki from "../../data/domiki.json";
 import { site } from "../../data/site";
 import { domikPhotos } from "../../data/photos";
 import { url } from "../../lib/url";
-import { formatPrice, seasonLabels, seasonMonths, type Season } from "../../lib/price";
+import { formatPrice, holidayNote, perPerson, seasonLabels, seasonMonths, type Season } from "../../lib/price";
 
 export function getStaticPaths() {
   return domiki.map((d, index) => ({ params: { slug: d.slug }, props: { domik: d, index } }));
@@ -22,7 +22,7 @@ const icons = ["bath", "house", "trees", "key"];
 const others = domiki.map((o, i) => ({ o, i })).filter(({ o }) => o.id !== d.id);
 ---
 
-<Base title={d.title} description={d.description}>
+<Base title={d.title} description={d.description} ogPhoto={domikPhotos[d.id]}>
   <PageHero overline={d.highlight} title={d.title} lead={d.subtitle} />
 
   <section data-tone="ivory" class="section">
@@ -58,7 +58,10 @@ const others = domiki.map((o, i) => ({ o, i })).filter(({ o }) => o.id !== d.id)
                     {seasonLabels[s]}
                     <span class="sub">{seasonMonths[s]}</span>
                   </th>
-                  <td class="num text-2xl">{d.pricePrefix ? `${d.pricePrefix} ` : ""}{formatPrice(d.prices[s]!)}</td>
+                  <td class="num text-2xl">
+                    {d.pricePrefix ? `${d.pricePrefix} ` : ""}{formatPrice(d.prices[s]!)}
+                    <span class="block font-sans text-xs text-muted">≈ {formatPrice(perPerson(d.prices[s]!, d.capacity))} с человека</span>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -67,6 +70,7 @@ const others = domiki.map((o, i) => ({ o, i })).filter(({ o }) => o.id !== d.id)
             <li class="flex gap-2"><Icon name="users" size={18} class="shrink-0 text-accent" />до {d.capacity} гостей</li>
             <li class="flex gap-2"><Icon name="moon" size={18} class="shrink-0 text-accent" />от {d.minNights ?? site.minNights} ночей</li>
             <li class="flex gap-2"><Icon name="clock" size={18} class="shrink-0 text-accent" />заезд с {site.checkIn}, выезд до {site.checkOut}</li>
+            <li class="flex gap-2"><Icon name="calendar" size={18} class="shrink-0 text-accent" />{holidayNote[0].toUpperCase() + holidayNote.slice(1)} — по цене сезона</li>
           </ul>
           <a href={url(`/bron/?type=${d.id}`)} class="btn btn-dark mt-8 w-full">Забронировать</a>
         </aside>

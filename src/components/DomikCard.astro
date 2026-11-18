@@ -2,7 +2,7 @@
 import ArtTile from "./ArtTile.astro";
 import Icon from "./Icon.astro";
 import { url } from "../lib/url";
-import { formatPrice } from "../lib/price";
+import { formatPrice, perPerson } from "../lib/price";
 import { domikPhotos } from "../data/photos";
 
 interface Props {
@@ -50,6 +50,7 @@ const icons = ["bath", "house", "trees", "key"];
       <p>
         <span class="block text-xs text-muted">{domik.pricePrefix ?? "от"} / сутки</span>
         <span class="font-display text-2xl">{formatPrice(domik.prices.offseason)}</span>
+        <span class="block text-xs text-muted">≈ {formatPrice(perPerson(domik.prices.offseason, domik.capacity))} с человека</span>
       </p>
       <a href={url(`/domiki/${domik.slug}/`)} class="link-arrow" aria-label={`Подробнее: ${domik.title}`}>
         Подробнее <Icon name="arrow" size={16} />
